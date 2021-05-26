@@ -1,11 +1,10 @@
 ''' 
 # ------------------------------------------------------------------------------------------------------------------------------------
 Author: Fynn Westerath
-Last Change: 13.05.2021 
+Last Change: 26.05.2021 
 (c) Copyright. Not for commercial use. All rights reserved
-
-Gitlab
-https://gitlab.com/hochwacht/roverchiste
+GitHub
+https://github.com/Fynnyx/discord.py-bots
 # ------------------------------------------------------------------------------------------------------------------------------------
 '''
 
