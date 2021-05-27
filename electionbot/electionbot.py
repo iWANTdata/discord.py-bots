@@ -58,7 +58,7 @@ class VoteBot(discord.Client):
 
     # Gives back who the winner is
     async def winner(self, reaction1_user, reaction2_user):
-        # deletes all duplikates in the list
+        # deletes all duplicates in the list
         reaction1_user = list(dict.fromkeys(reaction1_user))
         reaction2_user = list(dict.fromkeys(reaction2_user))
 
