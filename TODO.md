@@ -4,5 +4,5 @@
 ### Bot done
 
 ## Verifybot
-[] help embed
-[] finish the bot
+- [ ] help embed
+- [ ] finish the bot
