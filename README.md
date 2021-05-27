@@ -30,7 +30,7 @@ role_end_permission | user with this role can end elections (name)
 
 ### Commands
 
-```Discord
+```Python
 !electionbot info #get the info embed
 !electionbot help #get the help embed
 !electionbot question? #start an election
