@@ -4,7 +4,7 @@
 #### Bot done
 
 ## Verifybot
-- [ ] help embed
+- [x] help embed
 - [ ] finish the bot
 
 

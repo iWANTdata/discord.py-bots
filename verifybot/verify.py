@@ -40,8 +40,9 @@ class VerifyBot(discord.Client):
                 await user.add_roles(self.role)
 
     async def on_message(self, message):
+        print(message)
+        channel = client.get_channel(message.channel.id)
         if message.channel.name == verify_channel_name:
-            channel = client.get_channel(message.channel.id)
             user = message.author
             self.role = discord.utils.get(user.guild.roles, id=verify_role)
 
@@ -58,20 +59,6 @@ class VerifyBot(discord.Client):
 
                         await channel.send(embed=verify_embed)
 
-            # if the message is with info
-            elif message.content == verify_prefix + ' info':
-                # creates the info embed
-                info_embed = discord.Embed(title="Here you can get the most information about this bot!", colour=discord.Colour(0x29485e))
-                
-                info_embed.set_author(name="Electionbot Info", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                info_embed.add_field(name="General ❕:", value="In general this bot is a private project. I made the bot in my freetime.", inline=True)
-                info_embed.add_field(name="Personalize ✏:", value="You can personalize this bot by download the code from github and run it by yourself.", inline=True)
-                info_embed.add_field(name="Help Command 📜:", value="The bot prefix is `" + electionbot_prefix +"`. You will use this in front off all other  commands. More infos you'll get by using `" + electionbot_prefix +" help`.", inline=True)
-                info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
-                # sends the info embed
-                await channel.send(embed=info_embed)
-
             elif message.content == 'agree':
                 await message.delete()
                 await user.add_roles(self.role)
@@ -79,8 +66,43 @@ class VerifyBot(discord.Client):
             elif message.content != '!verify' and message.author != client.user:
                 await message.delete()
 
-            if message.author == client.user:
+            elif message.author == client.user:
+                channel = message.channel
                 await message.add_reaction(verify_emoji)
+
+        # if the message is with info
+        if message.content == verify_prefix + ' info':
+        # creates the info embed
+            info_embed = discord.Embed(title="Here you can get the most information about this bot!",
+                                       colour=discord.Colour(0x29485e))
+            info_embed.set_author(name="Verifybot Info",
+                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+            info_embed.add_field(name="General ❕:",
+                                 value="In general this bot is a private project. I made the bot in my freetime.",
+                                 inline=True)
+            info_embed.add_field(name="Personalize ✏:",
+                                 value="You can personalize this bot by download the code from github and run it by yourself.",
+                                 inline=True)
+            info_embed.add_field(name="Help Command 📜:",
+                                 value="The bot prefix is `" + verify_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + verify_prefix + " help`.",
+                                 inline=True)
+            info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
+            # sends the info embed
+            await channel.send(embed=info_embed)
+
+        if message.content == verify_prefix + ' help':
+            # create the embed for help
+            help_embed = discord.Embed(colour=discord.Colour(0x29485e))
+
+            help_embed.set_author(name="Verifybot Help",
+                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+            help_embed.add_field(name="Send the verify button",
+                                 value="With `" + verify_prefix + "` You can send the verify button.")
+            # sends the embed
+            await channel.send(embed=help_embed)
+
+
 
 
 
