@@ -11,6 +11,8 @@ Get your Bot-Token from [Discord Developer Portal](https://discord.com/developer
 ## Electionbot
 
 ### How to setup the bot
-If you want to use the bot on
+If you want to use the bot with preset settings only run the code on a server.
+
+
 
 ## Verifybot
