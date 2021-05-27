@@ -1,7 +1,7 @@
 # Fynnyxbot
 
 ### General
-Get your Bot-Token from 
+Get your Bot-Token from [Discord Developer Portal](https://discord.com/developers/applications)
 
 
 ### Electionbot
