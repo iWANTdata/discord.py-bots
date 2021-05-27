@@ -5,7 +5,7 @@
 
 ## Verifybot
 - [x] help embed
-- [ ] finish the bot
+- [x] finish the bot
 
 
 ## Economybot
