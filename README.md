@@ -49,6 +49,7 @@ If you want to use the bot with preset settings only run the code on a server.
 Variables | What they do
 ----------| ------------
 channel_name | set the channel (name)
+prefix | set the botprefix
 emoji | change the emoji to react to
 role | change the role (id)
 permission | set who have the permission to send the verify button (name)
