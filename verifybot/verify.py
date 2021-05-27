@@ -24,50 +24,69 @@ verify_emoji = '✅'
 verify_role = 847062220328534036
 verify_permission = 'Admin'
 
-
+# create Bot Class
 class VerifyBot(discord.Client):
-
+    
+    # set class variable 'role'
     role = 0
 
+    # if the bot is ready
     async def on_ready(self):
         print('Verify: logged in')
 
-
+    # if someone reacted
     async def on_reaction_add(self, reaction, user):
+        # if the message is in the verify channel
         if reaction.message.channel.name == verify_channel_name:
+            # if the reaction is the verify reaction
             if str(reaction) == verify_emoji:
+                # get the role
                 self.role = discord.utils.get(user.guild.roles, id=verify_role)
+                # give the user the role
                 await user.add_roles(self.role)
 
+    # if someone send a message
     async def on_message(self, message):
-        print(message)
+        # get the channel
         channel = client.get_channel(message.channel.id)
+        # if the channel si the right one
         if message.channel.name == verify_channel_name:
+            # get the user
             user = message.author
+            # get the role
             self.role = discord.utils.get(user.guild.roles, id=verify_role)
 
+            # if someone whant to send the button
             if message.content == '!verify':
 
-
+                # if the author has the permisson to do that
                 for role in user.roles:
                     if str(role) == verify_permission:
+                        # delete the message
                         await message.delete()
 
+                        # create the verify embed
                         verify_embed = discord.Embed(colour=discord.Colour(0x29485e), description="By clicking/tapping on " + verify_emoji + " below, you agree with the rules on this server. You can also verify by typing agree if clicking/tapping the reaction doesn't work.")
 
                         verify_embed.set_author(name="Verify ", icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
+                        # send the embed
                         await channel.send(embed=verify_embed)
-
+            
+            # if someone type agree in the chat
             elif message.content == 'agree':
+                # delete the message
                 await message.delete()
+                # give the verified role
                 await user.add_roles(self.role)
 
+            # if the message is another message
             elif message.content != '!verify' and message.author != client.user:
                 await message.delete()
 
+
             elif message.author == client.user:
                 channel = message.channel
+                # add the button
                 await message.add_reaction(verify_emoji)
 
         # if the message is with info
@@ -105,6 +124,6 @@ class VerifyBot(discord.Client):
 
 
 
-
+# start the bot
 client = VerifyBot()
 client.run(TOKEN)
