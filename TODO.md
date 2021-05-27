@@ -6,3 +6,7 @@
 ## Verifybot
 - [ ] help embed
 - [ ] finish the bot
+
+
+## Economybot
+- [ ] Everything

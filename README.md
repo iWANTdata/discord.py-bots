@@ -38,6 +38,8 @@ role_end_permission | user with this role can end elections (name)
 ```
 
 
+
+
 ## Verifybot
 
 ### What the bot do
@@ -54,7 +56,7 @@ emoji | change the emoji to react to
 role | change the role (id)
 permission | set who have the permission to send the verify button (name)
 
-
+    
 ### Commands
 
 ```Python
