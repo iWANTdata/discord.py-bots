@@ -91,6 +91,7 @@ class CommandBot(discord.Client):
             if message.content == commandbot_prefix + ' ip-adress':
                 await channel.send('IP adress: REPLACEWITHIP')
 
+
             if message.content == commandbot_prefix + ' get dj':
                 dj_role = discord.utils.get(user.guild.roles, id=commandbot_dj_role)
                 await user.add_roles(dj_role)

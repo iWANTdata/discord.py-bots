@@ -12,7 +12,8 @@
 - [ ] Everything
 
 ## Commandbot
-- [ ] Info
-- [ ] Help
-- [ ] ip-adress  
+- [x] Info
+- [x] Help
+- [x] ip-adress
+- [ ] get dj  
 - [ ] Own ideas
