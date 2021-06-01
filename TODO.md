@@ -7,7 +7,6 @@
 - [x] help embed
 - [x] finish the bot 🏆
 
-
 ## Economybot
 - [ ] Everything
 
