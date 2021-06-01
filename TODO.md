@@ -16,5 +16,5 @@
 - [x] Help
 - [x] ip-adress
 - [x] get dj
-- [ ] invitelink  
+- [ ] invitelink
 - [ ] Own ideas
