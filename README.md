@@ -6,6 +6,8 @@ Get your Bot-Token from [Discord Developer Portal](https://discord.com/developer
 ### Table of content
 * [Electionbot](https://github.com/Fynnyx/discord.py-bots#electionbot)
 * [Verifybot](https://github.com/Fynnyx/discord.py-bots#verifybot)
+* [Commandbot](https://github.com/Fynnyx/discord.py-bots#commandbot)
+
 
 ##### ❗Warning❗
 If you change something then maybe this readme won't help you
