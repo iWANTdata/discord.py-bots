@@ -74,10 +74,13 @@ agree #agrees the verification
 There you can add you own commands
 
 ### How to setup the bot
+Set the Invitelink to no limit and no time antil the link get deleted. Else you have to update this everytime
 
 Variables | What they do
 ----------| ------------
 prefix | change the prefix
+dj_role | insert the DJ role ID (int)
+invitelink | set the invitelink from your server
 
 
 ### Commands
@@ -85,6 +88,10 @@ prefix | change the prefix
 ```Python
 !commandbot info #get the info embed
 !commandbot help #get the help embed
+!commandbot get bots #shows all bots i made
+!commandbot get dj #gives the user the DJ role
+!commandbot invitelink #sends the invitelink of the server
+!commandbot ip-adress #sends the ip-adress oo something   ex. minecraft-server
 
 # add your own commands
 ```
@@ -105,7 +112,7 @@ prefix | change the prefix
 
 Variables | What they do
 ----------| ------------
-channel | set the channel (id)
+prefix | change the prefix
 
 
 ### Commands
