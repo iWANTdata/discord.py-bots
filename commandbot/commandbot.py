@@ -20,6 +20,7 @@ TOKEN = f.read()
 # variables to change
 commandbot_prefix: str = '!commandbot'
 commandbot_dj_role: int = 849245260382339123
+commandbot_invitelink: str = 'https://discord.gg/THISISONLYATEST'
 
 # creates the class for the Election bot
 class CommandBot(discord.Client):
@@ -95,6 +96,10 @@ class CommandBot(discord.Client):
             if message.content == commandbot_prefix + ' get dj':
                 dj_role = discord.utils.get(user.guild.roles, id=commandbot_dj_role)
                 await user.add_roles(dj_role)
+
+            if message.content == commandbot_prefix + ' invitelink':
+                await channel.send(commandbot_invitelink)
+
 
 
 
