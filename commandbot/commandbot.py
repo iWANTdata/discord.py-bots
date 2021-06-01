@@ -45,6 +45,7 @@ class CommandBot(discord.Client):
         channel = message.channel
         user = message.author
 
+        # Preset commands. I think they are usefull
         if user != client.user:
             if message.content == commandbot_prefix + ' info':
                 # creates the info embed
@@ -89,16 +90,18 @@ class CommandBot(discord.Client):
                 await channel.send(embed=get_bot_embed)
 
 
-            if message.content == commandbot_prefix + ' ip-adress':
-                await channel.send('IP adress: REPLACEWITHIP')
-
-
             if message.content == commandbot_prefix + ' get dj':
                 dj_role = discord.utils.get(user.guild.roles, id=commandbot_dj_role)
                 await user.add_roles(dj_role)
 
             if message.content == commandbot_prefix + ' invitelink':
                 await channel.send(commandbot_invitelink)
+
+            # Here you can insert youre own commands ...
+
+            # ... like this
+            if message.content == commandbot_prefix + ' ip-adress':
+                await channel.send('IP adress: REPLACEWITHIP')
 
 
 
