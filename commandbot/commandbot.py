@@ -19,6 +19,7 @@ TOKEN = f.read()
 
 # variables to change
 commandbot_prefix: str = '!commandbot'
+commandbot_dj_role: int = 849245260382339123
 
 # creates the class for the Election bot
 class CommandBot(discord.Client):
@@ -30,7 +31,11 @@ class CommandBot(discord.Client):
         'get dj' : 'Gives you the DJ role for the music bots',
     }
 
-    bots = ['commandbot, electionbot, verifybot']
+    bots = {
+        'commandbot' : 'This bot has little commands like `botprefix help` and gives you infoamtion about all bots.',
+        'electionbot' : 'The electionbot can start, end and evaluate an election.',
+        'verifybot' : 'With this bot you can send a verify button. With this other member have to verify first.'
+    }
 
     async def on_ready(self):
         print('CommandBot: logged in')
@@ -63,11 +68,8 @@ class CommandBot(discord.Client):
 
 
             if message.content == commandbot_prefix + ' help':
-                # help_message = ''
-                help_embed = discord.Embed(title="Here you can get the most information about this bot!",
-                                           colour=discord.Colour(0x29485e))
+                help_embed = discord.Embed(colour=discord.Colour(0x29485e))
                 for command in self.commands:
-                    # help_message = help_message + command + '\n'
 
                     help_embed.add_field(name=command, value=self.commands[command], inline=True)
 
@@ -75,18 +77,23 @@ class CommandBot(discord.Client):
 
 
             if message.content == commandbot_prefix + ' get bots':
-                bot_message = ''
-                for bot in self.bots:
-                    bot_message = bot_message + '`' + bot + '`\n'
+                get_bot_embed= discord.Embed(colour=discord.Colour(0x29485e))
 
-                await channel.send(bot_message)
+                get_bot_embed.set_author(name='Commandbot all bots',
+                                         icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+                for bot in self.bots:
+                    get_bot_embed.add_field(name=bot, value=self.bots[bot], inline=False)
+
+                await channel.send(embed=get_bot_embed)
 
 
             if message.content == commandbot_prefix + ' ip-adress':
-                await channel.send('ip-adress')
+                await channel.send('IP adress: REPLACEWITHIP')
 
             if message.content == commandbot_prefix + ' get dj':
-                await channel.send('get the role')
+                dj_role = discord.utils.get(user.guild.roles, id=commandbot_dj_role)
+                await user.add_roles(dj_role)
 
 
 
