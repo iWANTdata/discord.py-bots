@@ -45,7 +45,7 @@ role_end_permission | user with this role can end elections (name)
 ## Verifybot
 
 ### What the bot do
-With this bot you can add a verify button to a channel. By reacting to this emoji the user get the verified role. With this you can try to avoid bot accounts.
+With this bot you can add a verify button to a channel. By reacting to this emoji ,✅, the user get the verified role. With this you can try to avoid bot accounts.
 
 ### How to setup the bot
 If you want to use the bot with preset settings only run the code on a server.
