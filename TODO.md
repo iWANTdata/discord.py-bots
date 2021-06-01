@@ -14,4 +14,5 @@
 ## Commandbot
 - [ ] Info
 - [ ] Help
+- [ ] ip-adress  
 - [ ] Own ideas

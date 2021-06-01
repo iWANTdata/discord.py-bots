@@ -66,6 +66,27 @@ permission | set who have the permission to send the verify button (name)
 agree #agrees the verification
 ```
 
+## Commandbot
+
+### What the bot do
+There you can add you own commands
+
+### How to setup the bot
+
+Variables | What they do
+----------| ------------
+prefix | change the prefix
+
+
+### Commands
+
+```Python
+!commandbot info #get the info embed
+!commandbot help #get the help embed
+
+# add your own commands
+```
+
 
 
 
