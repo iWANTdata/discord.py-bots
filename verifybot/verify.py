@@ -100,7 +100,7 @@ class VerifyBot(discord.Client):
                                  value="In general this bot is a private project. I made the bot in my freetime.",
                                  inline=True)
             info_embed.add_field(name="Personalize ✏:",
-                                 value="You can personalize this bot by download the code from github and run it by yourself.",
+                                 value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
                                  inline=True)
             info_embed.add_field(name="Help Command 📜:",
                                  value="The bot prefix is `" + verify_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + verify_prefix + " help`.",
@@ -118,6 +118,8 @@ class VerifyBot(discord.Client):
 
             help_embed.add_field(name="Send the verify button",
                                  value="With `" + verify_prefix + "` You can send the verify button.")
+            help_embed.add_field(name="Agree hte rules",
+                                 value="By typing `agree` in the right channel, you agree the rules")
             # sends the embed
             await channel.send(embed=help_embed)
 

@@ -18,13 +18,78 @@ f = open(".env")
 TOKEN = f.read()
 
 # variables to change
-electionbot_prefix: str = '!commandbot'
+commandbot_prefix: str = '!commandbot'
 
 # creates the class for the Election bot
 class CommandBot(discord.Client):
 
+    commands = {
+        'info' : 'Get info embed with all commands',
+        'help' : 'Sends the help embed with all commands',
+        'ip-adress' : 'Shows you the ip-adress from the server',
+        'get dj' : 'Gives you the DJ role for the music bots',
+    }
+
+    bots = ['commandbot, electionbot, verifybot']
+
     async def on_ready(self):
         print('CommandBot: logged in')
+
+    async def on_message(self, message):
+        channel = message.channel
+        user = message.author
+
+        if user != client.user:
+            if message.content == commandbot_prefix + ' info':
+                # creates the info embed
+                info_embed = discord.Embed(title="Here you can get the most information about this bot!",
+                                           colour=discord.Colour(0x29485e))
+
+                info_embed.set_author(name="Commandbot Info",
+                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+                info_embed.add_field(name="General ❕:",
+                                     value="In general this bot is a private project. I made the bot in my freetime.",
+                                     inline=True)
+                info_embed.add_field(name="Personalize ✏:",
+                                     value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
+                                     inline=True)
+                info_embed.add_field(name="Help Command 📜:",
+                                     value="Type the bot prefix + help, then you get every command you can use. Use `" + commandbot_prefix + " help` for commands",
+                                     inline=True)
+                info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
+                # sends the info embed
+                await channel.send(embed=info_embed)
+
+
+            if message.content == commandbot_prefix + ' help':
+                # help_message = ''
+                help_embed = discord.Embed(title="Here you can get the most information about this bot!",
+                                           colour=discord.Colour(0x29485e))
+                for command in self.commands:
+                    # help_message = help_message + command + '\n'
+
+                    help_embed.add_field(name=command, value=self.commands[command], inline=True)
+
+                await channel.send(embed=help_embed)
+
+
+            if message.content == commandbot_prefix + ' get bots':
+                bot_message = ''
+                for bot in self.bots:
+                    bot_message = bot_message + '`' + bot + '`\n'
+
+                await channel.send(bot_message)
+
+
+            if message.content == commandbot_prefix + ' ip-adress':
+                await channel.send('ip-adress')
+
+            if message.content == commandbot_prefix + ' get dj':
+                await channel.send('get the role')
+
+
+
 
 
 client = CommandBot()
