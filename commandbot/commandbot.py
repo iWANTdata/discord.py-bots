@@ -1,7 +1,7 @@
 '''
 # ------------------------------------------------------------------------------------------------------------------------------------
 Author: Fynn Westerath
-Last Change: 01.06.2020
+Last Change: 01.06.2021
 (c) Copyright. Not for commercial use. All rights reserved
 GitHub
 https://github.com/Fynnyx/discord.py-bots
