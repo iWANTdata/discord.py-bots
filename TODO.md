@@ -10,3 +10,8 @@
 
 ## Economybot
 - [ ] Everything
+
+## Commandbot
+- [ ] Info
+- [ ] Help
+- [ ] Own ideas
