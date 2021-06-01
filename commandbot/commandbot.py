@@ -25,28 +25,38 @@ commandbot_invitelink: str = 'https://discord.gg/THISISONLYATEST'
 # creates the class for the Election bot
 class CommandBot(discord.Client):
 
+    # All commandbot commands
     commands = {
         'info' : 'Get info embed with all commands',
         'help' : 'Sends the help embed with all commands',
-        'ip-adress' : 'Shows you the ip-adress from the server',
+        'get bots' : 'Gives back all bots',
         'get dj' : 'Gives you the DJ role for the music bots',
+        'invitelink' : 'Sends the invitelink',
+
+        'ip-adress': 'Shows you the ip-adress from the server',
+
+    #     Insert your own commands with description
     }
 
+    # All bots i made witt description
     bots = {
         'commandbot' : 'This bot has little commands like `botprefix help` and gives you infoamtion about all bots.',
         'electionbot' : 'The electionbot can start, end and evaluate an election.',
         'verifybot' : 'With this bot you can send a verify button. With this other member have to verify first.'
     }
 
+    # if teh bot is ready
     async def on_ready(self):
         print('CommandBot: logged in')
 
+    # If someone send a message
     async def on_message(self, message):
         channel = message.channel
         user = message.author
 
         # Preset commands. I think they are usefull
         if user != client.user:
+            # Sends the info embed
             if message.content == commandbot_prefix + ' info':
                 # creates the info embed
                 info_embed = discord.Embed(title="Here you can get the most information about this bot!",
@@ -68,7 +78,7 @@ class CommandBot(discord.Client):
                 # sends the info embed
                 await channel.send(embed=info_embed)
 
-
+            # Shows all commands of this bot
             if message.content == commandbot_prefix + ' help':
                 help_embed = discord.Embed(colour=discord.Colour(0x29485e))
                 for command in self.commands:
@@ -77,7 +87,7 @@ class CommandBot(discord.Client):
 
                 await channel.send(embed=help_embed)
 
-
+            # shows all bot i made and what they do
             if message.content == commandbot_prefix + ' get bots':
                 get_bot_embed= discord.Embed(colour=discord.Colour(0x29485e))
 
@@ -89,11 +99,12 @@ class CommandBot(discord.Client):
 
                 await channel.send(embed=get_bot_embed)
 
-
+            # Gives the user the DJ role for music bots
             if message.content == commandbot_prefix + ' get dj':
                 dj_role = discord.utils.get(user.guild.roles, id=commandbot_dj_role)
                 await user.add_roles(dj_role)
 
+            # Sends the invitelink of this dc
             if message.content == commandbot_prefix + ' invitelink':
                 await channel.send(commandbot_invitelink)
 
