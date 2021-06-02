@@ -96,6 +96,25 @@ invitelink | set the invitelink from your server
 # add your own commands
 ```
 
+## Economybot
+
+### What the bot do
+With this bot you can bring your own currency on your server. The member can send the money to other member.
+
+### How to setup the bot
+
+
+Variables | What they do
+----------| ------------
+prefix | change the prefix
+
+
+### Commands
+
+```Python
+
+```
+
 
 
 
