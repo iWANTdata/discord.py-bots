@@ -8,6 +8,11 @@
 - [x] finish the bot 🏆
 
 ## Economybot
+- [ ] create DB
+- [ ] connect DB
+- [ ] help embed
+- [ ] info embed
+- [ ] give money (only Admin)  
 - [ ] Everything
 
 ## Commandbot
