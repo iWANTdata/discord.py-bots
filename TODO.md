@@ -16,6 +16,8 @@
 - [ ] info embed
 - [x] add money (only Admin) 
 - [ ] give money
+- [ ] Whole shop system
+- [ ] Whole work system
 
 ## Commandbot
 - [x] Info
