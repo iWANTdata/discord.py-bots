@@ -102,7 +102,7 @@ invitelink | set the invitelink from your server
 With this bot you can bring your own currency on your server. The member can send the money to other member.
 
 ### How to setup the bot
-
+save the *bot.json.example* as *bot.json* one folder obove the bot file
 
 Variables | What they do
 ----------| ------------
