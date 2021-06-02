@@ -62,20 +62,21 @@ class EconomyBot(discord.Client):
 
         elif message.content.startswith(economybot_prefix + ' add'):
             for role in member.roles:
-                # if the user has the permission_role the election ends
+                # if the user has the permissiont to use the economybot
                 if str(role) == economybot_role_bank_permission:
                     money_recipent = str(message.mentions[0].id)
 
-                    sender_money_amount = 10
+                    add_message = message.content
+                    add_message = add_message.split(' ')
+                    range = len(add_message) - 1
+                    sender_money_amount = add_message[int(range)]
 
 
                     with open('economy.json') as f:
                         data = json.load(f)
 
                     money_recipent_money = data['users'][money_recipent]['money']
-
-                    money_amount = int(money_recipent_money) + sender_money_amount
-
+                    money_amount = int(money_recipent_money) + int(sender_money_amount)
                     data['users'][money_recipent]['money'] = str(money_amount)
 
                     with open('economy.json', 'w') as f:
@@ -109,6 +110,7 @@ class EconomyBot(discord.Client):
 
 
         elif message.content == economybot_prefix + ' register':
+
             user = message.author
 
             with open('economy.json', 'r') as f:
