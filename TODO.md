@@ -8,12 +8,14 @@
 - [x] finish the bot 🏆
 
 ## Economybot
-- [ ] create DB
-- [ ] connect DB
+- [x] create JSON file
+- [x] find out how to use a JSON file  
+- [x] register command
+- [x] coins command  
 - [ ] help embed
 - [ ] info embed
-- [ ] give money (only Admin)  
-- [ ] Everything
+- [x] add money (only Admin) 
+- [ ] give money
 
 ## Commandbot
 - [x] Info
