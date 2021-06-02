@@ -56,7 +56,7 @@ class EconomyBot(discord.Client):
             message_request = str(message.content)
             money_recipient = str(message.mentions[0].id)
             money_sender = message.author
-            with open('../bot.json') as f:
+            with open('economy.json') as f:
                 data = json.load(f)
 
 
@@ -69,7 +69,7 @@ class EconomyBot(discord.Client):
                     sender_money_amount = 10
 
 
-                    with open('../bot.json') as f:
+                    with open('economy.json') as f:
                         data = json.load(f)
 
                     money_recipent_money = data['users'][money_recipent]['money']
@@ -78,7 +78,7 @@ class EconomyBot(discord.Client):
 
                     data['users'][money_recipent]['money'] = str(money_amount)
 
-                    with open('../bot.json', 'w') as f:
+                    with open('economy.json', 'w') as f:
                         f.write(json.dumps(data))
 
                     added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
@@ -96,7 +96,7 @@ class EconomyBot(discord.Client):
             coin_member_str = str(message.mentions[0].id)
             coin_member = message.mentions[0]
 
-            with open('../bot.json') as f:
+            with open('economy.json') as f:
                 data = json.load(f)
 
             coins = data['users'][coin_member_str]['money']
@@ -111,7 +111,7 @@ class EconomyBot(discord.Client):
         elif message.content == economybot_prefix + ' register':
             user = message.author
 
-            with open('../bot.json', 'r') as f:
+            with open('economy.json', 'r') as f:
                 data = json.load(f)
 
                 if str(user.id) in data['users']:
@@ -125,7 +125,7 @@ class EconomyBot(discord.Client):
                 else:
                     data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0'}
 
-                    with open('../bot.json', 'w') as f:
+                    with open('economy.json', 'w') as f:
                         f.write(json.dumps(data))
 
 
