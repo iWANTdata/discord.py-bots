@@ -21,6 +21,8 @@
 - [ ] give money
 - [ ] Whole shop system
 - [ ] Whole work system
+- [ ] change Embed url
+- [ ] if member in json file
 
 ## Commandbot
 - [x] Info
@@ -29,3 +31,7 @@
 - [x] get dj
 - [x] invitelink
 - [x] Own ideas 🏆
+
+## Bitcoinbot
+- [ ] Info
+- [ ] Help
