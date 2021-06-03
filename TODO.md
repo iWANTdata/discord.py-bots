@@ -20,7 +20,6 @@
 - [x] info embed
 - [x] add money (only Admin)
 - [ ] remove money (only Admin)  
->>>>>>> Stashed changes
 - [ ] give money
 - [ ] Whole shop system
 - [ ] Whole work system
