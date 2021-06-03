@@ -40,12 +40,16 @@ class EconomyBot(discord.Client):
 
 
     async def on_message(self, message):
+        # get the channel where the message was sended
         channel = message.channel
+        # get the author
         member = message.author
+
+        # if the help command got called
         if message.content == (economybot_prefix + ' help'):
             print('Help')
 
-
+        # if the info command got called
         elif message.content == (economybot_prefix + ' info'):
             # creates the info embed
             info_embed = discord.Embed(title="Here you can get the most information about this bot!",
@@ -67,46 +71,156 @@ class EconomyBot(discord.Client):
             # sends the info embed
             await channel.send(embed=info_embed)
 
-
+        # if someone want to to send money to another member
         elif message.content.startswith(economybot_prefix + ' give'):
-            guild = message.guild
-            message_request = str(message.content)
-            money_recipient = str(message.mentions[0].id)
-            money_sender = message.author
-            with open('economy.json') as f:
-                data = json.load(f)
+            # if someone got mentioned in the message
+            if message.mentions != []:
+                    # get the content of the message
+                    message_request = message.content
+                    # split it at every space
+                    message_request_split = message_request.split(' ')
+                    # the recipient is the first user in the mention list
+                    money_recipient = message.mentions[0]
+                    # the sender is the author
+                    money_sender = message.author
+                    # how long the message is
+                    range = len(message_request_split) - 1
+                    # the range only can be 4 words long
+                    if range == 3:
+                        # set the amount of money
+                        sender_money_amount = message_request_split[int(range)]
+                        # open the json file
+                        with open('users.json') as f:
+                            # save the data in data
+                            data = json.load(f)
+                        # if the sender is registered
+                        if str(money_sender.id) in data['users']:
+                            # if the recipient is registered
+                            if str(money_recipient.id) in data['users']:
+                                # get the money count of the sender
+                                money_sender_money = data['users'][str(money_sender.id)]['money']
+                                # check if the sender has enough money
+                                if int(money_sender_money) - int(sender_money_amount) < 0:
+                                    # if he hasn't enough money
+                                    not_enough_money_embed = discord.Embed(
+                                        title="You dont have enough money", description="<@" + str(message.mentions[0].id) + "> you only have " + data['users'][str(money_sender.id)]['money'],
+                                        colour=discord.Colour(0x29485e))
+                                    not_enough_money_embed.set_author(name="Economybot Register Error",
+                                                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                    # send the embed
+                                    await channel.send(embed=not_enough_money_embed)
+                                # if the sender has enough money
+                                else:
+                                    # get the amount of money from the recipient
+                                    money_recipent_money = data['users'][str(money_recipient.id)]['money']
+                                    # add the money to the recipient
+                                    money_amount = int(money_recipent_money) + int(sender_money_amount)
+                                    # add it to the dict
+                                    data['users'][str(money_recipient.id)]['money'] = str(money_amount)
 
+                                    # write it in the file
+                                    with open('users.json', 'w') as f:
+                                        f.write(json.dumps(data))
 
+                                    # get the moneyamount from the sender
+                                    money_sender_money = data['users'][str(money_sender.id)]['money']
+                                    # remove the amount of money from the sender
+                                    money_amount = int(money_sender_money) - int(sender_money_amount)
+                                    # add it to the dict
+                                    data['users'][str(money_sender.id)]['money'] = str(money_amount)
+
+                                    # write it in the file
+                                    with open('users.json', 'w') as f:
+                                        f.write(json.dumps(data))
+
+                                    # embed that the money has been send
+                                    send_embed = discord.Embed(
+                                        title= money_sender.name + " sended money.",
+                                        description="<@" + str(message.mentions[0].id) + "> you got " + sender_money_amount + " coins  💸  from <@" + str(money_sender.id) + ">",
+                                        colour=discord.Colour(0x29485e))
+                                    send_embed.set_author(name="Economybot Register Error",
+                                                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                    # send the embed
+                                    await channel.send(embed=send_embed)
+                            # if the recipient hasnt registered yet
+                            else:
+                                pls_register_embed = discord.Embed(
+                                    title="The member has to register first",
+                                    description="<@" + str(message.mentions[0].id) + ">",
+                                    colour=discord.Colour(0x29485e))
+                                pls_register_embed.set_author(name="Economybot Register Error",
+                                                              icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+                                await channel.send(embed=pls_register_embed)
+                        # if the sender hast registered
+                        else:
+                            pls_register_embed = discord.Embed(
+                                title="You have to register first",
+                                colour=discord.Colour(0x29485e))
+                            pls_register_embed.set_author(name="Economybot Register Error",
+                                                          icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+                            await channel.send(embed=pls_register_embed)
+
+        # if a 'Banker' want to add money to a member
         elif message.content.startswith(economybot_prefix + ' add'):
+            # get all roles
             for role in member.roles:
-                # if the user has the permissiont to use the economybot
+                # if the user has the permissiont to use the economybot admin functions
                 if str(role) == economybot_role_bank_permission:
+                    # if someone got mentioned
                     if message.mentions != []:
+                        # define the recipent
                         money_recipent = str(message.mentions[0].id)
+                        # get the message
                         add_message = message.content
+                        # split the message to a list
                         add_message = add_message.split(' ')
+                        # define the length of the list
                         range = len(add_message) - 1
+                        # if the message has 4 words
                         if range == 3:
-
+                            # set the amount
                             sender_money_amount = add_message[int(range)]
 
-
-                            with open('economy.json') as f:
+                            # open the file
+                            with open('users.json') as f:
                                 data = json.load(f)
 
-                            money_recipent_money = data['users'][money_recipent]['money']
-                            money_amount = int(money_recipent_money) + int(sender_money_amount)
-                            data['users'][money_recipent]['money'] = str(money_amount)
+                            # if the user is registered
+                            if money_recipent in data['users']:
+                                # get the money from the recipient
+                                money_recipent_money = data['users'][money_recipent]['money']
+                                # add the money
+                                money_amount = int(money_recipent_money) + int(sender_money_amount)
+                                # save it in the dict
+                                data['users'][money_recipent]['money'] = str(money_amount)
 
-                            with open('economy.json', 'w') as f:
-                                f.write(json.dumps(data))
+                                # write it into the file
+                                with open('users.json', 'w') as f:
+                                    f.write(json.dumps(data))
 
-                            added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
-                                                       colour=discord.Colour(0x29485e))
-                            added_embed.set_author(name="Economybot Coins",
-                                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                # say that money has been send
+                                added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
+                                                           colour=discord.Colour(0x29485e))
+                                added_embed.set_author(name="Economybot Coins",
+                                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
-                            await channel.send(embed=added_embed)
+                                await channel.send(embed=added_embed)
+                                break
+
+                            else:
+                                # the recipient has to register first
+                                pls_register_embed = discord.Embed(
+                                    title="The member has to register first",
+                                    description="<@" + str(message.mentions[0].id) + ">",
+                                    colour=discord.Colour(0x29485e))
+                                pls_register_embed.set_author(name="Economybot Register Error",
+                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+                                await channel.send(embed=pls_register_embed)
+                                break
+                        # if the command is not right
                         else:
                             add_error_embed = discord.Embed(title="Something went wrong", description="`" + economybot_prefix + "` add `@member` `amount",
                                                                  colour=discord.Colour(0x29485e))
@@ -115,6 +229,8 @@ class EconomyBot(discord.Client):
                                                             icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
 
                             await channel.send(embed=add_error_embed)
+                            break
+                    # if th command is not right
                     else:
                         add_error_embed = discord.Embed(title="Something went wrong",
                                                         description="`" + economybot_prefix + "` add `@member` `amount",
@@ -124,39 +240,54 @@ class EconomyBot(discord.Client):
                                                    icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
 
                         await channel.send(embed=add_error_embed)
+                        break
 
+        # if someone has to much money :)
         elif message.content.startswith(economybot_prefix + ' remove'):
+            # check the permission
             for role in member.roles:
                 # if the user has the permissiont to use the economybot
                 if str(role) == economybot_role_bank_permission:
+                    # if someone got mentioned in the message
                     if message.mentions != []:
+                        # get the recipient
                         money_recipent = str(message.mentions[0].id)
+                        # save the message
                         add_message = message.content
+                        # split the message
                         add_message = add_message.split(' ')
+                        # save the length of the message
                         range = len(add_message) - 1
+                        # the message has to have 4 words
                         if range == 3:
-
+                            # defin the amount of money
                             sender_money_amount = add_message[int(range)]
 
-
-                            with open('economy.json') as f:
+                            # opne the json file
+                            with open('users.json') as f:
                                 data = json.load(f)
+                            # if the recipient is registered
                             if money_recipent in data['users']:
-
+                                # get the money amount from the recipient
                                 money_recipent_money = data['users'][money_recipent]['money']
-                                money_amount = int(money_recipent_money) + int(sender_money_amount)
+                                # remove the money from the bank acc
+                                money_amount = int(money_recipent_money) - int(sender_money_amount)
+                                # write it into the dict
                                 data['users'][money_recipent]['money'] = str(money_amount)
 
-                                with open('economy.json', 'w') as f:
+                                # write it into the file
+                                with open('users.json', 'w') as f:
                                     f.write(json.dumps(data))
 
-                                added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
+                                # send what has been removed
+                                added_embed = discord.Embed(title="Removed "+ str(sender_money_amount) + " coins  💸  from" , description="<@" + str(message.mentions[0].id) + ">",
                                                            colour=discord.Colour(0x29485e))
-                                added_embed.set_author(name="Economybot Added Coins",
+                                added_embed.set_author(name="Economybot Removed Coins",
                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
                                 await channel.send(embed=added_embed)
                                 break
+                            # if the recipient isn't registered
                             else:
                                 pls_register_embed = discord.Embed(
                                     title="The member has to register first",
@@ -167,7 +298,7 @@ class EconomyBot(discord.Client):
 
                                 await channel.send(embed=pls_register_embed)
                                 break
-
+                        # if the command is false
                         else:
                             add_error_embed = discord.Embed(title="Something went wrong", description="`" + economybot_prefix + "` add `@member` `amount`",
                                                                  colour=discord.Colour(0x29485e))
@@ -177,6 +308,7 @@ class EconomyBot(discord.Client):
 
                             await channel.send(embed=add_error_embed)
                             break
+                    # if the command is wrong
                     else:
                         add_error_embed = discord.Embed(title="Something went wrong",
                                                         description="`" + economybot_prefix + "` add `@member` `amount`",
@@ -188,122 +320,96 @@ class EconomyBot(discord.Client):
                         await channel.send(embed=add_error_embed)
                         break
 
-
-
-        elif message.content.startswith(economybot_prefix + ' remove'):
-            for role in member.roles:
-                # if the user has the permissiont to use the economybot
-                if str(role) == economybot_role_bank_permission:
-                    if message.mentions != []:
-                        money_recipent = str(message.mentions[0].id)
-                        add_message = message.content
-                        add_message = add_message.split(' ')
-                        range = len(add_message) - 1
-                        if range == 3:
-
-                            sender_money_amount = add_message[int(range)]
-
-                            with open('economy.json') as f:
-                                data = json.load(f)
-                            if money_recipent in data['users']:
-
-                                money_recipent_money = data['users'][money_recipent]['money']
-                                money_amount = int(money_recipent_money) - int(sender_money_amount)
-                                data['users'][money_recipent]['money'] = str(money_amount)
-
-                                with open('economy.json', 'w') as f:
-                                    f.write(json.dumps(data))
-
-                                added_embed = discord.Embed(
-                                    title="Removed " + str(sender_money_amount) + " coins  💸  from",
-                                    description="<@" + str(message.mentions[0].id) + ">",
-                                    colour=discord.Colour(0x29485e))
-                                added_embed.set_author(name="Economybot Remove Coins",
-                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                                await channel.send(embed=added_embed)
-                                break
-                            else:
-                                pls_register_embed = discord.Embed(
-                                    title="The member has to register first",
-                                    description="<@" + str(message.mentions[0].id) + ">",
-                                    colour=discord.Colour(0x29485e))
-                                pls_register_embed.set_author(name="Economybot Register Error",
-                                                              icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                                await channel.send(embed=pls_register_embed)
-                                break
-
-                        else:
-                            add_error_embed = discord.Embed(title="Something went wrong",
-                                                            description="`" + economybot_prefix + "` add `@member` `amount`",
-                                                            colour=discord.Colour(0x29485e))
-
-                            add_error_embed.set_author(name="Economybot Remoce Error",
-                                                       icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
-                            await channel.send(embed=add_error_embed)
-                            break
-                    else:
-                        add_error_embed = discord.Embed(title="Something went wrong",
-                                                        description="`" + economybot_prefix + "` add `@member` `amount`",
-                                                        colour=discord.Colour(0x29485e))
-
-                        add_error_embed.set_author(name="Economybot Remove Error",
-                                                   icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
-                        await channel.send(embed=add_error_embed)
-                        break
-
+        # to get the amount of coins from a user
         elif message.content.startswith(economybot_prefix + ' coins'):
-
+            # if someone got mentioned
             if message.mentions != []:
+                # save the member
                 coin_member = message.mentions[0]
 
-                with open('economy.json') as f:
+                # open the file
+                with open('users.json') as f:
                     data = json.load(f)
+                # if the user isn't registered
+                if coin_member.id in data['users']:
+                    # save the amount of coins from the mentioned user
+                    coins = data['users'][str(coin_member.id)]['money']
 
-                coins = data['users'][str(coin_member.id)]['money']
+                    # write the embed
+                    coin_embed = discord.Embed(title=coin_member.name + " has " + coins + " coins  💸", colour=discord.Colour(0x29485e))
+                    coin_embed.set_thumbnail(url=coin_member.avatar_url)
+                    coin_embed.set_author(name="Economybot Coins", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                    # send the embed
+                    await channel.send(embed=coin_embed)
+                else:
+                    # if the user isn't registered send the mbed
+                    pls_register_embed = discord.Embed(
+                        title="The member has to register first",
+                        description="<@" + str(message.mentions[0].id) + ">",
+                        colour=discord.Colour(0x29485e))
+                    pls_register_embed.set_author(name="Economybot Register Error",
+                                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
-                coin_embed = discord.Embed(title=coin_member.name + " has " + coins + " coins  💸", colour=discord.Colour(0x29485e))
-                coin_embed.set_thumbnail(url=coin_member.avatar_url)
-                coin_embed.set_author(name="Economybot Coins", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                    await channel.send(embed=pls_register_embed)
 
-                await channel.send(embed=coin_embed)
+            # if noone got metioned
             else:
+                # save the author
                 coin_member = message.author
 
-                with open('economy.json') as f:
+                # open the file and read the data
+                with open('users.json') as f:
                     data = json.load(f)
+                # if the user isn't registered
+                if coin_member.id in data['users']:
 
-                coins = data['users'][str(coin_member.id)]['money']
+                    # save the amount of money
+                    coins = data['users'][str(coin_member.id)]['money']
 
-                coin_embed = discord.Embed(title=coin_member.name + " has " + coins + " coins  💸",
-                                           colour=discord.Colour(0x29485e))
-                coin_embed.set_thumbnail(url=coin_member.avatar_url)
-                coin_embed.set_author(name="Economybot Coins",
-                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                    # write the embed
+                    coin_embed = discord.Embed(title=coin_member.name + " has " + coins + " coins  💸",
+                                               colour=discord.Colour(0x29485e))
+                    coin_embed.set_thumbnail(url=coin_member.avatar_url)
+                    coin_embed.set_author(name="Economybot Coins",
+                                          icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                    # send the mebd
+                    await channel.send(embed=coin_embed)
+                else:
+                    # if the user isn't registered send the mbed
+                    pls_register_embed = discord.Embed(
+                        title="The member has to register first",
+                        description="<@" + str(coin_member.id) + ">",
+                        colour=discord.Colour(0x29485e))
+                    pls_register_embed.set_author(name="Economybot Register Error",
+                                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
-                await channel.send(embed=coin_embed)
+                    await channel.send(embed=pls_register_embed)
 
-
+        # if someone want to register
         elif message.content == economybot_prefix + ' register':
+            # save the author
             user = message.author
-            with open('economy.json', 'r') as f:
+            # open the file and read the data
+            with open('users.json', 'r') as f:
                 data = json.load(f)
 
+                # if the user is already registered
                 if str(user.id) in data['users']:
                     register_error_embed = discord.Embed(title="You can't register because youre already in 👍",
                                           colour=discord.Colour(0x29485e))
                     register_error_embed.set_author(name="Economybot Register Error",
                                      icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
                     await channel.send(embed=register_error_embed)
+                # if not registered
                 else:
+                    # add a dict
                     data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0'}
 
-                    with open('economy.json', 'w') as f:
+                    # write it into the file
+                    with open('users.json', 'w') as f:
                         f.write(json.dumps(data))
 
+                    # welcome the new user
                     registered_embed = discord.Embed(title="Welcome ❤",
                                                     description="<@" + str(message.author.id) + '> you can now use the bot and get money 💸',
                                                     colour=discord.Colour(0x29485e))

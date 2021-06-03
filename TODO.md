@@ -13,12 +13,12 @@
 - [x] register command
 - [x] coins command  
 - [ ] help embed
-- [ ] info embed
+- [x] info embed
 - [x] add money (only Admin) 
 - [x] info embed
 - [x] add money (only Admin)
-- [ ] remove money (only Admin)  
-- [ ] give money
+- [x] remove money (only Admin)  
+- [x] give money
 - [ ] Whole shop system
 - [ ] Whole work system
 - [ ] change Embed url
@@ -33,5 +33,9 @@
 - [x] Own ideas 🏆
 
 ## Bitcoinbot
+- [ ] Info
+- [ ] Help
+
+## Moderatorbot
 - [ ] Info
 - [ ] Help
