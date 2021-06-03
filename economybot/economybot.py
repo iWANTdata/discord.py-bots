@@ -81,7 +81,6 @@ class EconomyBot(discord.Client):
             for role in member.roles:
                 # if the user has the permissiont to use the economybot
                 if str(role) == economybot_role_bank_permission:
-<<<<<<< Updated upstream
                     if message.mentions != []:
                         money_recipent = str(message.mentions[0].id)
                         add_message = message.content
@@ -130,48 +129,6 @@ class EconomyBot(discord.Client):
             for role in member.roles:
                 # if the user has the permissiont to use the economybot
                 if str(role) == economybot_role_bank_permission:
-=======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-                    money_recipent = str(message.mentions[0].id)
-
-                    remove_message = message.content
-                    remove_message = remove_message.split(' ')
-                    range = len(remove_message) - 1
-                    if range == 3:
-
-                        sender_money_amount = remove_message[int(range)]
-
-                        with open('economy.json') as f:
-                            data = json.load(f)
-
-                        money_recipent_money = data['users'][money_recipent]['money']
-                        money_amount = int(money_recipent_money) - int(sender_money_amount)
-                        data['users'][money_recipent]['money'] = str(money_amount)
-
-                        with open('economy.json', 'w') as f:
-                            f.write(json.dumps(data))
-
-                        added_embed = discord.Embed(title="Added " + str(sender_money_amount) + " coins  💸  to",
-                                                    description="<@" + str(message.mentions[0].id) + ">",
-                                                    colour=discord.Colour(0x29485e))
-                        added_embed.set_author(name="Economybot Coins",
-                                               icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                        await channel.send(embed=added_embed)
-                    else:
-                        add_error_embed = discord.Embed(title="Something went wrong",
-                                                        description="`" + economybot_prefix + "` add `@member` `amount",
-                                                        colour=discord.Colour(0x29485e))
-
-                        add_error_embed.set_author(name="Economybot Add Error",
-                                                   icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
-<<<<<<< Updated upstream
-                        await channel.send(embed=add_error_embed)
-=======
-                    break
-=======
                     if message.mentions != []:
                         money_recipent = str(message.mentions[0].id)
                         add_message = message.content
@@ -230,6 +187,8 @@ class EconomyBot(discord.Client):
 
                         await channel.send(embed=add_error_embed)
                         break
+
+
 
         elif message.content.startswith(economybot_prefix + ' remove'):
             for role in member.roles:
@@ -295,9 +254,6 @@ class EconomyBot(discord.Client):
 
                         await channel.send(embed=add_error_embed)
                         break
->>>>>>> Stashed changes
->>>>>>> Stashed changes
-
 
         elif message.content.startswith(economybot_prefix + ' coins'):
 
