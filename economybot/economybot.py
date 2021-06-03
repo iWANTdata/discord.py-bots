@@ -48,7 +48,25 @@ class EconomyBot(discord.Client):
 
 
         elif message.content == (economybot_prefix + ' info'):
-            print('Info')
+            # creates the info embed
+            info_embed = discord.Embed(title="Here you can get the most information about this bot!",
+                                       colour=discord.Colour(0x29485e))
+
+            info_embed.set_author(name="Electionbot Info",
+                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+            info_embed.add_field(name="General ❕:",
+                                 value="In general this bot is a private project. I made the bot in my freetime.",
+                                 inline=True)
+            info_embed.add_field(name="Personalize ✏:",
+                                 value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
+                                 inline=True)
+            info_embed.add_field(name="Help Command 📜:",
+                                 value="The bot prefix is `" + economybot_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + economybot_prefix + " help`.",
+                                 inline=True)
+            info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
+            # sends the info embed
+            await channel.send(embed=info_embed)
 
 
         elif message.content.startswith(economybot_prefix + ' give'):
@@ -69,28 +87,75 @@ class EconomyBot(discord.Client):
                     add_message = message.content
                     add_message = add_message.split(' ')
                     range = len(add_message) - 1
-                    sender_money_amount = add_message[int(range)]
+                    if range == 3:
+
+                        sender_money_amount = add_message[int(range)]
 
 
-                    with open('economy.json') as f:
-                        data = json.load(f)
+                        with open('economy.json') as f:
+                            data = json.load(f)
 
-                    money_recipent_money = data['users'][money_recipent]['money']
-                    money_amount = int(money_recipent_money) + int(sender_money_amount)
-                    data['users'][money_recipent]['money'] = str(money_amount)
+                        money_recipent_money = data['users'][money_recipent]['money']
+                        money_amount = int(money_recipent_money) + int(sender_money_amount)
+                        data['users'][money_recipent]['money'] = str(money_amount)
 
-                    with open('economy.json', 'w') as f:
-                        f.write(json.dumps(data))
+                        with open('economy.json', 'w') as f:
+                            f.write(json.dumps(data))
 
-                    added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
-                                               colour=discord.Colour(0x29485e))
-                    added_embed.set_author(name="Economybot Coins",
-                                          icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                        added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
+                                                   colour=discord.Colour(0x29485e))
+                        added_embed.set_author(name="Economybot Coins",
+                                              icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
-                    await channel.send(embed=added_embed)
+                        await channel.send(embed=added_embed)
+                    else:
+                        add_error_embed = discord.Embed(title="Something went wrong", description="`" + economybot_prefix + "` add `@member` `amount",
+                                                             colour=discord.Colour(0x29485e))
 
+                        add_error_embed.set_author(name="Economybot Add Error",
+                                                        icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
 
-                    break
+                        await channel.send(embed=add_error_embed)
+
+        elif message.content.startswith(economybot_prefix + ' remove'):
+            for role in member.roles:
+                # if the user has the permissiont to use the economybot
+                if str(role) == economybot_role_bank_permission:
+                    money_recipent = str(message.mentions[0].id)
+
+                    remove_message = message.content
+                    remove_message = remove_message.split(' ')
+                    range = len(remove_message) - 1
+                    if range == 3:
+
+                        sender_money_amount = remove_message[int(range)]
+
+                        with open('economy.json') as f:
+                            data = json.load(f)
+
+                        money_recipent_money = data['users'][money_recipent]['money']
+                        money_amount = int(money_recipent_money) - int(sender_money_amount)
+                        data['users'][money_recipent]['money'] = str(money_amount)
+
+                        with open('economy.json', 'w') as f:
+                            f.write(json.dumps(data))
+
+                        added_embed = discord.Embed(title="Added " + str(sender_money_amount) + " coins  💸  to",
+                                                    description="<@" + str(message.mentions[0].id) + ">",
+                                                    colour=discord.Colour(0x29485e))
+                        added_embed.set_author(name="Economybot Coins",
+                                               icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+                        await channel.send(embed=added_embed)
+                    else:
+                        add_error_embed = discord.Embed(title="Something went wrong",
+                                                        description="`" + economybot_prefix + "` add `@member` `amount",
+                                                        colour=discord.Colour(0x29485e))
+
+                        add_error_embed.set_author(name="Economybot Add Error",
+                                                   icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+
+                        await channel.send(embed=add_error_embed)
 
 
         elif message.content.startswith(economybot_prefix + ' coins'):
