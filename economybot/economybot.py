@@ -82,8 +82,9 @@ class EconomyBot(discord.Client):
             for role in member.roles:
                 # if the user has the permissiont to use the economybot
                 if str(role) == economybot_role_bank_permission:
-                    money_recipent = str(message.mentions[0].id)
-
+                    if message.mentions != []:
+                        money_recipent = str(message.mentions[0].id)
+                    else:
                     add_message = message.content
                     add_message = add_message.split(' ')
                     range = len(add_message) - 1
