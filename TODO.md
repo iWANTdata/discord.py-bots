@@ -16,7 +16,8 @@
 - [ ] info embed
 - [x] add money (only Admin) 
 - [x] info embed
-- [x] add money (only Admin) 
+- [x] add money (only Admin)
+- [ ] remove money (only Admin)  
 - [ ] give money
 - [ ] Whole shop system
 - [ ] Whole work system
