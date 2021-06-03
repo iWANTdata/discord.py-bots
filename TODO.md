@@ -13,6 +13,8 @@
 - [x] register command
 - [x] coins command  
 - [ ] help embed
+- [ ] info embed
+- [x] add money (only Admin) 
 - [x] info embed
 - [x] add money (only Admin) 
 - [ ] give money
