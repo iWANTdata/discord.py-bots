@@ -12,7 +12,6 @@ https://github.com/Fynnyx/discord.py-bots
 # Imports
 import discord
 from discord.utils import get
-
 import json
 
 
@@ -188,7 +187,7 @@ class EconomyBot(discord.Client):
                                 data = json.load(f)
 
                             # if the user is registered
-                            if money_recipent in data['users']:
+                            if str(money_recipent) in data['users']:
                                 # get the money from the recipient
                                 money_recipent_money = data['users'][money_recipent]['money']
                                 # add the money
@@ -267,7 +266,7 @@ class EconomyBot(discord.Client):
                             with open('users.json') as f:
                                 data = json.load(f)
                             # if the recipient is registered
-                            if money_recipent in data['users']:
+                            if str(money_recipent) in data['users']:
                                 # get the money amount from the recipient
                                 money_recipent_money = data['users'][money_recipent]['money']
                                 # remove the money from the bank acc
@@ -331,7 +330,7 @@ class EconomyBot(discord.Client):
                 with open('users.json') as f:
                     data = json.load(f)
                 # if the user isn't registered
-                if coin_member.id in data['users']:
+                if str(coin_member.id) in data['users']:
                     # save the amount of coins from the mentioned user
                     coins = data['users'][str(coin_member.id)]['money']
 
@@ -361,7 +360,7 @@ class EconomyBot(discord.Client):
                 with open('users.json') as f:
                     data = json.load(f)
                 # if the user isn't registered
-                if coin_member.id in data['users']:
+                if str(coin_member.id) in data['users']:
 
                     # save the amount of money
                     coins = data['users'][str(coin_member.id)]['money']
@@ -414,8 +413,25 @@ class EconomyBot(discord.Client):
                                                     description="<@" + str(message.author.id) + '> you can now use the bot and get money 💸',
                                                     colour=discord.Colour(0x29485e))
                     registered_embed.set_author(name="Economybot Register",
-                                               icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+                                               icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
                     await channel.send(embed=registered_embed)
+
+
+        elif message.content == economybot_prefix + ' shop':
+
+            with open("shop.json") as f:
+                data = json.load(f)
+
+            items_shop = data['shop']['ITEMSHOP']['items']
+
+            itemshop_embed = discord.Embed(title="ITEMSHOP", description="Buy items and use them later",
+                                           colour=discord.Colour(0x29485e))
+            itemshop_embed.set_author(name="Economybot Shop", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+            for item in items_shop:
+                itemshop_embed.add_field(name=item['item_name'], value=item['description'], inline=True)
+
+            await channel.send('shop')
+
 
 # start the bot
 client = EconomyBot()
