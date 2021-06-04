@@ -1,3 +1,4 @@
 .idea
 economybot/users.json
 economybot/shop.json
+.env
