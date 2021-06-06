@@ -11,6 +11,7 @@ https://github.com/Fynnyx/discord.py-bots
 
 # Imports
 import discord
+from discord import embeds
 from discord.utils import get
 import json
 
@@ -38,9 +39,46 @@ class EconomyBot(discord.Client):
         print('EconomyBot: logged in')
 
 
+    async def not_registered_error_you(self, you_id):
+        pls_register_embed = discord.Embed(
+                                title="You have to register first",
+                                description="<@" + str(you_id) + ">",
+                                colour=discord.Colour(0x29485e))
+        pls_register_embed.set_author(
+                                name="Economybot Register Error",
+                                icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+        await self.channel.send(embed=pls_register_embed)
+
+    async def not_registered_error_other(self, other_id):
+        pls_register_embed = discord.Embed(
+                                    title="The member has to register first",
+                                    description="<@" + str(other_id) + ">",
+                                    colour=discord.Colour(0x29485e))
+        pls_register_embed.set_author(
+                                    name="Economybot Register Error",
+                                    icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+        await self.channel.send(embed=pls_register_embed)
+
+    async def something_went_wrong(self):
+        add_error_embed = discord.Embed(
+                                title="Something went wrong", 
+                                description="`" + economybot_prefix + "` add `@member` `amount`",
+                                colour=discord.Colour(0x29485e))
+
+        add_error_embed.set_author(
+                                name="Economybot Add Error",
+                                icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+        await self.channel.send(embed=add_error_embed)        
+
+
+
+
     async def on_message(self, message):
         # get the channel where the message was sended
-        channel = message.channel
+        self.channel = message.channel
         # get the author
         member = message.author
 
@@ -68,7 +106,7 @@ class EconomyBot(discord.Client):
                                  inline=True)
             info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
             # sends the info embed
-            await channel.send(embed=info_embed)
+            await self.channel.send(embed=info_embed)
 
         # if someone want to to send money to another member
         elif message.content.startswith(economybot_prefix + ' give'):
@@ -107,7 +145,7 @@ class EconomyBot(discord.Client):
                                     not_enough_money_embed.set_author(name="Economybot Register Error",
                                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
                                     # send the embed
-                                    await channel.send(embed=not_enough_money_embed)
+                                    await self.channel.send(embed=not_enough_money_embed)
                                 # if the sender has enough money
                                 else:
                                     # get the amount of money from the recipient
@@ -140,26 +178,14 @@ class EconomyBot(discord.Client):
                                     send_embed.set_author(name="Economybot Register Error",
                                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
                                     # send the embed
-                                    await channel.send(embed=send_embed)
+                                    await self.channel.send(embed=send_embed)
                             # if the recipient hasnt registered yet
                             else:
-                                pls_register_embed = discord.Embed(
-                                    title="The member has to register first",
-                                    description="<@" + str(message.mentions[0].id) + ">",
-                                    colour=discord.Colour(0x29485e))
-                                pls_register_embed.set_author(name="Economybot Register Error",
-                                                              icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                await self.not_registered_error_other(str(message.mentions[0].id))
 
-                                await channel.send(embed=pls_register_embed)
                         # if the sender hast registered
                         else:
-                            pls_register_embed = discord.Embed(
-                                title="You have to register first",
-                                colour=discord.Colour(0x29485e))
-                            pls_register_embed.set_author(name="Economybot Register Error",
-                                                          icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                            await channel.send(embed=pls_register_embed)
+                            await self.not_registered_error_you(str(message.author.id))
 
         # if a 'Banker' want to add money to a member
         elif message.content.startswith(economybot_prefix + ' add'):
@@ -205,40 +231,20 @@ class EconomyBot(discord.Client):
                                 added_embed.set_author(name="Economybot Coins",
                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
-                                await channel.send(embed=added_embed)
+                                await self.channel.send(embed=added_embed)
                                 break
 
                             else:
                                 # the recipient has to register first
-                                pls_register_embed = discord.Embed(
-                                    title="The member has to register first",
-                                    description="<@" + str(message.mentions[0].id) + ">",
-                                    colour=discord.Colour(0x29485e))
-                                pls_register_embed.set_author(name="Economybot Register Error",
-                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                                await channel.send(embed=pls_register_embed)
+                                await self.not_registered_error_other(str(message.mentions[0].id))
                                 break
                         # if the command is not right
                         else:
-                            add_error_embed = discord.Embed(title="Something went wrong", description="`" + economybot_prefix + "` add `@member` `amount",
-                                                                 colour=discord.Colour(0x29485e))
-
-                            add_error_embed.set_author(name="Economybot Add Error",
-                                                            icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
-                            await channel.send(embed=add_error_embed)
+                            await self.something_went_wrong()
                             break
                     # if th command is not right
                     else:
-                        add_error_embed = discord.Embed(title="Something went wrong",
-                                                        description="`" + economybot_prefix + "` add `@member` `amount",
-                                                        colour=discord.Colour(0x29485e))
-
-                        add_error_embed.set_author(name="Economybot Add Error",
-                                                   icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
-                        await channel.send(embed=add_error_embed)
+                        await self.something_went_wrong()
                         break
 
         # if someone has to much money :)
@@ -284,39 +290,19 @@ class EconomyBot(discord.Client):
                                 added_embed.set_author(name="Economybot Removed Coins",
                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
-                                await channel.send(embed=added_embed)
+                                await self.channel.send(embed=added_embed)
                                 break
                             # if the recipient isn't registered
                             else:
-                                pls_register_embed = discord.Embed(
-                                    title="The member has to register first",
-                                    description="<@" + str(message.mentions[0].id) + ">",
-                                    colour=discord.Colour(0x29485e))
-                                pls_register_embed.set_author(name="Economybot Register Error",
-                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                                await channel.send(embed=pls_register_embed)
+                                await self.not_registered_error_other(str(message.mentions[0].id))
                                 break
                         # if the command is false
                         else:
-                            add_error_embed = discord.Embed(title="Something went wrong", description="`" + economybot_prefix + "` add `@member` `amount`",
-                                                                 colour=discord.Colour(0x29485e))
-
-                            add_error_embed.set_author(name="Economybot Add Error 2",
-                                                            icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
-                            await channel.send(embed=add_error_embed)
+                            await self.something_went_wrong()
                             break
                     # if the command is wrong
                     else:
-                        add_error_embed = discord.Embed(title="Something went wrong",
-                                                        description="`" + economybot_prefix + "` add `@member` `amount`",
-                                                        colour=discord.Colour(0x29485e))
-
-                        add_error_embed.set_author(name="Economybot Add Error 1",
-                                                   icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-
-                        await channel.send(embed=add_error_embed)
+                        await self.something_went_wrong()
                         break
 
         # to get the amount of coins from a user
@@ -339,17 +325,9 @@ class EconomyBot(discord.Client):
                     coin_embed.set_thumbnail(url=coin_member.avatar_url)
                     coin_embed.set_author(name="Economybot Coins", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
                     # send the embed
-                    await channel.send(embed=coin_embed)
+                    await self.channel.send(embed=coin_embed)
                 else:
-                    # if the user isn't registered send the mbed
-                    pls_register_embed = discord.Embed(
-                        title="The member has to register first",
-                        description="<@" + str(message.mentions[0].id) + ">",
-                        colour=discord.Colour(0x29485e))
-                    pls_register_embed.set_author(name="Economybot Register Error",
-                                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                    await channel.send(embed=pls_register_embed)
+                    await self.not_registered_error_other(str(message.mentions[0].id))
 
             # if noone got metioned
             else:
@@ -372,17 +350,10 @@ class EconomyBot(discord.Client):
                     coin_embed.set_author(name="Economybot Coins",
                                           icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
                     # send the mebd
-                    await channel.send(embed=coin_embed)
+                    await self.channel.send(embed=coin_embed)
                 else:
                     # if the user isn't registered send the mbed
-                    pls_register_embed = discord.Embed(
-                        title="The member has to register first",
-                        description="<@" + str(coin_member.id) + ">",
-                        colour=discord.Colour(0x29485e))
-                    pls_register_embed.set_author(name="Economybot Register Error",
-                                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-
-                    await channel.send(embed=pls_register_embed)
+                    await self.not_registered_error_you(str(coin_member.id))
 
         # if someone want to register
         elif message.content == economybot_prefix + ' register':
@@ -398,11 +369,11 @@ class EconomyBot(discord.Client):
                                           colour=discord.Colour(0x29485e))
                     register_error_embed.set_author(name="Economybot Register Error",
                                      icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
-                    await channel.send(embed=register_error_embed)
+                    await self.channel.send(embed=register_error_embed)
                 # if not registered
                 else:
                     # add a dict
-                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0'}
+                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "inventory" : {"coconut" : "0", "Bronze Role" : "0"}}
 
                     # write it into the file
                     with open('users.json', 'w') as f:
@@ -414,23 +385,25 @@ class EconomyBot(discord.Client):
                                                     colour=discord.Colour(0x29485e))
                     registered_embed.set_author(name="Economybot Register",
                                                icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-                    await channel.send(embed=registered_embed)
+                    await self.channel.send(embed=registered_embed)
 
 
         elif message.content == economybot_prefix + ' shop':
 
             with open("shop.json") as f:
                 data = json.load(f)
-
+            
             items_shop = data['shop']['ITEMSHOP']['items']
 
             itemshop_embed = discord.Embed(title="ITEMSHOP", description="Buy items and use them later",
                                            colour=discord.Colour(0x29485e))
             itemshop_embed.set_author(name="Economybot Shop", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
             for item in items_shop:
-                itemshop_embed.add_field(name=item['item_name'], value=item['description'], inline=True)
+                itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'], value=data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
 
-            await channel.send('shop')
+            await self.channel.send(embed=itemshop_embed)
+        
+
 
 
 # start the bot
