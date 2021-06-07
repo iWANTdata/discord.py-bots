@@ -1,5 +1,1 @@
-{"textures" : {
-  "Eisbärschwert" : {"name" :  "Eisbärschwert", "description" :  "Schwert mit blauer textur und animierter Klinge \n für Pizza"}
-}
-
-}
+{"textures": {"test": {"name": "test", "description": "test \n f\u00fcr test"}, "tet": {"name": "tet", "description": "tes \n f\u00fcr tes"}}}

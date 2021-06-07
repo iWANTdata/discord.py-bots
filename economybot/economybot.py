@@ -64,7 +64,7 @@ class EconomyBot(discord.Client):
     async def something_went_wrong(self):
         add_error_embed = discord.Embed(
                                 title="Something went wrong", 
-                                description="`" + economybot_prefix + "` add `@member` `amount`",
+                                description="`" + economybot_prefix + "` add/remove `@member` `amount`",
                                 colour=discord.Colour(0x29485e))
 
         add_error_embed.set_author(
@@ -403,8 +403,6 @@ class EconomyBot(discord.Client):
 
             await self.channel.send(embed=itemshop_embed)
         
-
-
 
 # start the bot
 client = EconomyBot()
