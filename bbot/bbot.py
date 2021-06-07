@@ -59,7 +59,7 @@ class Bbot(discord.Client):
                                     add_message = message.content
                                     add_message = add_message.split(' ')
                                     range = len(add_message) - 1
-                                    if range == 4:
+                                    if range >= 4:
 
                                         itemname = add_message[2]
                                         description = add_message[3]
