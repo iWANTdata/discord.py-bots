@@ -1,1 +1,5 @@
-{"users": }}
+{"users":
+    {"DC_ID_AS_NAME": {"dc_id": "DC_ID",
+                        "money": "MONEY",
+                        "inventory": {"coconut": "0",
+                                        "Bronze Role": "0"}}
