@@ -71,12 +71,29 @@ class EconomyBot(discord.Client):
                                 name="Economybot Add Error",
                                 icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
 
-        await self.channel.send(embed=add_error_embed)        
+        await self.channel.send(embed=add_error_embed)
+
+    async def item_shop(self):
+        with open("shop.json") as f:
+            data = json.load(f)
+
+        items_shop = data['shop']['ITEMSHOP']['items']
+
+        itemshop_embed = discord.Embed(title="ITEMSHOP", description="Buy items and use them later",
+                                       colour=discord.Colour(0x29485e))
+        itemshop_embed.set_author(name="Economybot Shop",
+                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+        for item in items_shop:
+            itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'],
+                                     value=data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
+
+        await self.channel.send(embed=itemshop_embed)
 
 
 
 
     async def on_message(self, message):
+        print(message)
         # get the channel where the message was sended
         self.channel = message.channel
         # get the author
@@ -390,21 +407,9 @@ class EconomyBot(discord.Client):
                                                icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
                     await self.channel.send(embed=registered_embed)
 
-
         elif message.content == economybot_prefix + ' shop':
+            await self.item_shop()
 
-            with open("shop.json") as f:
-                data = json.load(f)
-            
-            items_shop = data['shop']['ITEMSHOP']['items']
-
-            itemshop_embed = discord.Embed(title="ITEMSHOP", description="Buy items and use them later",
-                                           colour=discord.Colour(0x29485e))
-            itemshop_embed.set_author(name="Economybot Shop", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
-            for item in items_shop:
-                itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'], value=data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
-
-            await self.channel.send(embed=itemshop_embed)
         
 
 # start the bot
