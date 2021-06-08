@@ -1,7 +1,7 @@
 '''
 # -----------------------------------------------------------------------------------------------------------------------------------
 Author: Fynn Westerath
-Last Change: 07.06.2021
+Last Change: 08.06.2021
 (c) Copyright. Not for commercial use. All rights reserved
 GitHub
 https://github.com/Fynnyx/discord.py-bots
@@ -35,6 +35,30 @@ class Bbot(discord.Client):
             if message.author != client.user:
 
                 if message.channel.id == bbot_channel:
+
+                    if message.content == (bbot_prefix + ' info'):
+                        # creates the info embed
+                        info_embed = discord.Embed(title="Here you can get the most information about this bot!",
+                                                   colour=discord.Colour(0x29485e))
+
+                        info_embed.set_author(name="Electionbot Info",
+                                              icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+                        info_embed.add_field(name="General ❕:",
+                                             value="In general this bot is a private project. I made the bot in my freetime.",
+                                             inline=True)
+                        info_embed.add_field(name="Personalize ✏:",
+                                             value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
+                                             inline=True)
+                        info_embed.add_field(name='GitHub:',
+                                             value='Wanna use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
+                                             inline=True)
+                        info_embed.add_field(name="Help Command 📜:",
+                                             value="The bot prefix is `" + bbot_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + bbot_prefix + " help`.",
+                                             inline=True)
+                        info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
+                        # sends the info embed
+                        await self.channel.send(embed=info_embed)
 
                     if message.content == bbot_prefix + ' help':
                         help_embed = discord.Embed(title='Community Texturepack ‍🎨')
@@ -75,15 +99,15 @@ class Bbot(discord.Client):
                                         description = get_description[1]
                                         user = add_message[range]
 
-                                        description = description + ' \n für ' + user
+                                        description = description + ' \n Für `' + user + '`'
 
                                         with open('textures.json', encoding='UTF-8') as f:
                                             data = json.load(f)
 
-                                            data['textures'][str(itemname)] = {'name' : str(itemname), 'description' : str(description)}
+                                        data['textures'][str(itemname)] = {'name' : str(itemname), 'description' : str(description)}
 
-                                            with open('textures.json', 'w', encoding='UTF-8') as f:
-                                                f.write(json.dumps(data))
+                                        with open('textures.json', 'w', encoding='UTF-8') as f:
+                                            f.write(json.dumps(data))
 
                                     else:
                                         add_error_embed = discord.Embed(title="Something went wrong",

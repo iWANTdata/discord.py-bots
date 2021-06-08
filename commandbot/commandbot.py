@@ -71,6 +71,9 @@ class CommandBot(discord.Client):
                 info_embed.add_field(name="Personalize ✏:",
                                      value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
                                      inline=True)
+                info_embed.add_field(name='GitHub:',
+                                     value='Wanna use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
+                                     inline=True)
                 info_embed.add_field(name="Help Command 📜:",
                                      value="Type the bot prefix + help, then you get every command you can use. Use `" + commandbot_prefix + " help` for commands",
                                      inline=True)

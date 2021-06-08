@@ -101,6 +101,9 @@ class EconomyBot(discord.Client):
             info_embed.add_field(name="Personalize ✏:",
                                  value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
                                  inline=True)
+            info_embed.add_field(name='GitHub:',
+                                 value='Wanna use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
+                                 inline=True)
             info_embed.add_field(name="Help Command 📜:",
                                  value="The bot prefix is `" + economybot_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + economybot_prefix + " help`.",
                                  inline=True)
