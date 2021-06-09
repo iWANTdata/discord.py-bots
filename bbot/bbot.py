@@ -114,10 +114,12 @@ class Bbot(discord.Client):
                                         with open('textures.json', 'w', encoding='UTF-8') as f:
                                             f.write(json.dumps(data))
 
-                                        added_item_embed = discord.Embed(title='New Item added', description='Bbond hat eine neue Textur zum Texturepack hinzugefügt', colour=discord.Colour(0x65158d))
+                                        added_item_embed = discord.Embed(title='New Item added', description='Bbond hat eine neue Textur zum Texturepack hinzugefügt \n **' + str(itemname) + '**', colour=discord.Colour(0x65158d))
 
                                         added_item_embed.set_author(name="Texturepackbot",
                                               icon_url=self.profile_picture)
+
+                                        await channel.send(embed=added_item_embed)
                                     else:
                                         add_error_embed = discord.Embed(title="Something went wrong",
                                                                         description="`" + bbot_prefix + "` add `itemname` `description` `für wen`",
@@ -126,6 +128,14 @@ class Bbot(discord.Client):
                                                                     icon_url=self.profile_picture)
 
                                         await channel.send(embed=add_error_embed)
+
+                    if message.content == bbot_prefix + ' downloads':
+                        download_embed = discord.Embed(title='Community Texturepack ‍🎨', colour=discord.Colour(0x65158d))
+                        download_embed.add_field(name='Demo Version', value='https://www.mediafire.com/file/6mwrqpi4idmyf2b/%25C2%25A76%25C2%25A7lKahlifar_%25C2%25A76%25C2%25A7lDemo_%25C2%25A7a%25C2%25A7lPack.zip/file', inline=False)
+                        download_embed.add_field(name='Vollversion vom --.--.----', value='PASTELINKHERE', inline=False)
+
+                        await channel.send(embed=download_embed)
+
                 else:
                     wrong_channel_embed = discord.Embed(title='Community Texturepack ‍🎨', colour=discord.Colour(0x65158d))
                     wrong_channel_embed.set_author(name="Texturepackbot",
