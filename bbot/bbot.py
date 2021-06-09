@@ -54,7 +54,7 @@ class Bbot(discord.Client):
                                              value="The bot prefix is `" + bbot_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + bbot_prefix + " help`.",
                                              inline=True)
                         info_embed.add_field(name='GitHub:',
-                                             value='Wanna use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
+                                             value='Want to use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
                                              inline=False)
                         info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
                         await channel.send(embed=info_embed)
@@ -113,11 +113,14 @@ class Bbot(discord.Client):
                                         with open('textures.json', 'w', encoding='UTF-8') as f:
                                             f.write(json.dumps(data))
 
+                                        added_item_embed = discord.Embed(title='New Item added', description='Bbond hat eine neue Textur zum Texturepack hinzugefügt')
+
+                                        added_item_embed.set_author(name="Texturepackbot",
+                                              icon_url=self.profile_picture)
                                     else:
                                         add_error_embed = discord.Embed(title="Something went wrong",
                                                                         description="`" + bbot_prefix + "` add `itemname` `description` `für wen`",
                                                                         colour=discord.Colour(0x29485e))
-
                                         add_error_embed.set_author(name="Economybot Add Error",
                                                                     icon_url=self.profile_picture)
 
@@ -127,6 +130,8 @@ class Bbot(discord.Client):
                     wrong_channel_embed.set_author(name="Texturepackbot",
                                               icon_url=self.profile_picture)
                     wrong_channel_embed.add_field(name='Wrong Channel', value='Um den DC aufgeräumt zu halten benutze bitte den dafür vorhergesehene Channel')
+
+                    await message.delete()
 
                     await channel.send(embed=wrong_channel_embed)
 

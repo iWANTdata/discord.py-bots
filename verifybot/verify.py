@@ -103,7 +103,7 @@ class VerifyBot(discord.Client):
                                  value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
                                  inline=True)
             info_embed.add_field(name='GitHub:',
-                                 value='Wanna use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
+                                 value='Want to use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
                                  inline=True)
             info_embed.add_field(name="Help Command 📜:",
                                  value="The bot prefix is `" + verify_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + verify_prefix + " help`.",
