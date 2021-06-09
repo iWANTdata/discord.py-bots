@@ -115,6 +115,27 @@ prefix | change the prefix
 
 ```
 
+## Bbot
+
+### What the bot do
+This bot is a bot for our minecraft community texturepack.
+
+### How to setup the bot
+
+Variables | What they do
+----------| ------------
+prefix | change the prefix
+
+
+### Commands
+
+```Python
+!bbot info #sends the infos about the bot
+!bbot help #shows the commands
+!bbot textures #sends all textures which are in the texturepack
+!bbot add [parameters] #adds a new Item to the list
+```
+
 
 
 

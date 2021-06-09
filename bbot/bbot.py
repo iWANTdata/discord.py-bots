@@ -25,6 +25,7 @@ bbot_prefix: str = '!bbot'
 class Bbot(discord.Client):
 
     async def on_ready(self):
+        self.profile_picture = client.user.avatar_url
         print('Bbot: logged in')
 
     async def on_message(self, message):
@@ -37,12 +38,11 @@ class Bbot(discord.Client):
                 if message.channel.id == bbot_channel:
 
                     if message.content == (bbot_prefix + ' info'):
-                        # creates the info embed
                         info_embed = discord.Embed(title="Here you can get the most information about this bot!",
                                                    colour=discord.Colour(0x29485e))
 
                         info_embed.set_author(name="Electionbot Info",
-                                              icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                              icon_url=self.profile_picture)
 
                         info_embed.add_field(name="General ❕:",
                                              value="In general this bot is a private project. I made the bot in my freetime.",
@@ -50,24 +50,28 @@ class Bbot(discord.Client):
                         info_embed.add_field(name="Personalize ✏:",
                                              value="You can personalize this bot by download the code from github (https://github.com/Fynnyx/discord.py-bots) and run it by yourself.",
                                              inline=True)
-                        info_embed.add_field(name='GitHub:',
-                                             value='Wanna use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
-                                             inline=True)
                         info_embed.add_field(name="Help Command 📜:",
                                              value="The bot prefix is `" + bbot_prefix + "`. You will use this in front off all other  commands. More infos you'll get by using `" + bbot_prefix + " help`.",
                                              inline=True)
+                        info_embed.add_field(name='GitHub:',
+                                             value='Wanna use more bots? Visit https://github.com/Fynnyx/discord.py-bots to get more open source Discord bots.',
+                                             inline=False)
                         info_embed.add_field(name="Everything done? ", value="Have fun ❤", inline=False)
-                        # sends the info embed
-                        await self.channel.send(embed=info_embed)
+                        await channel.send(embed=info_embed)
 
                     if message.content == bbot_prefix + ' help':
                         help_embed = discord.Embed(title='Community Texturepack ‍🎨')
                         help_embed.set_author(name="Texturepackbot",
-                                                       icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                                       icon_url=self.profile_picture)
                         help_embed.add_field(name='textures',
-                                                      value='Mit `' + bbot_prefix + ' textures` kannst du alle texturen vom texturepack bekommen')
+                                                value='Mit `' + bbot_prefix + ' textures` kannst du alle texturen vom texturepack bekommen',
+                                                inline=True)
                         help_embed.add_field(name='add',
-                                                value="Bbond kann mit `" + bbot_prefix + " add` `itemname` `'description'` `zugehöhriger Spieler` ")
+                                                value="Bbond kann mit `" + bbot_prefix + " add` `itemname` `'description'` `zugehöhriger Spieler` neue Items hinzufügen.",
+                                                inline=True)
+                        help_embed.add_field(name='Fehler gefunden?',
+                                             value='schreibe Bbond oder Fynnyx an sie ändern es',
+                                             inline=False)
 
                         await channel.send(embed=help_embed)
 
@@ -80,7 +84,7 @@ class Bbot(discord.Client):
                         textures = data['textures']
 
                         textures_embed = discord.Embed(title='Community Texturepack 🎨')
-                        textures_embed.set_author(name="Texturepackbot", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                        textures_embed.set_author(name="Texturepackbot", icon_url=self.profile_picture)
 
                         for texture in textures:
                             textures_embed.add_field(name=texture, value=data['textures'][texture]['description'], inline=True)
@@ -115,13 +119,13 @@ class Bbot(discord.Client):
                                                                         colour=discord.Colour(0x29485e))
 
                                         add_error_embed.set_author(name="Economybot Add Error",
-                                                                    icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                                                    icon_url=self.profile_picture)
 
                                         await channel.send(embed=add_error_embed)
                 else:
                     wrong_channel_embed = discord.Embed(title='Community Texturepack ‍🎨')
                     wrong_channel_embed.set_author(name="Texturepackbot",
-                                              icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                              icon_url=self.profile_picture)
                     wrong_channel_embed.add_field(name='Wrong Channel', value='Um den DC aufgeräumt zu halten benutze bitte den dafür vorhergesehene Channel')
 
                     await channel.send(embed=wrong_channel_embed)

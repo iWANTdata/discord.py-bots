@@ -35,6 +35,7 @@ class EconomyBot(discord.Client):
 
     # if the bot started
     async def on_ready(self):
+        self.profile_picture = client.user.avatar_url
         await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='Fynnyx'))
         print('EconomyBot: logged in')
 
@@ -46,7 +47,7 @@ class EconomyBot(discord.Client):
                                 colour=discord.Colour(0x29485e))
         pls_register_embed.set_author(
                                 name="Economybot Register Error",
-                                icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                icon_url=self.profile_picture)
 
         await self.channel.send(embed=pls_register_embed)
 
@@ -57,7 +58,7 @@ class EconomyBot(discord.Client):
                                     colour=discord.Colour(0x29485e))
         pls_register_embed.set_author(
                                     name="Economybot Register Error",
-                                    icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                    icon_url=self.profile_picture)
 
         await self.channel.send(embed=pls_register_embed)
 
@@ -69,7 +70,7 @@ class EconomyBot(discord.Client):
 
         add_error_embed.set_author(
                                 name="Economybot Add Error",
-                                icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                icon_url=self.profile_picture)
 
         await self.channel.send(embed=add_error_embed)
 
@@ -82,7 +83,7 @@ class EconomyBot(discord.Client):
         itemshop_embed = discord.Embed(title="ITEMSHOP", description="Buy items and use them later",
                                        colour=discord.Colour(0x29485e))
         itemshop_embed.set_author(name="Economybot Shop",
-                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                  icon_url=self.profile_picture)
         for item in items_shop:
             itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'],
                                      value=data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
@@ -93,9 +94,9 @@ class EconomyBot(discord.Client):
 
 
     async def on_message(self, message):
-        print(message)
         # get the channel where the message was sended
         self.channel = message.channel
+
         # get the author
         member = message.author
 
@@ -110,7 +111,7 @@ class EconomyBot(discord.Client):
                                        colour=discord.Colour(0x29485e))
 
             info_embed.set_author(name="Electionbot Info",
-                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                  icon_url=self.profile_picture)
 
             info_embed.add_field(name="General ❕:",
                                  value="In general this bot is a private project. I made the bot in my freetime.",
@@ -163,7 +164,7 @@ class EconomyBot(discord.Client):
                                         title="You dont have enough money", description="<@" + str(message.mentions[0].id) + "> you only have " + data['users'][str(money_sender.id)]['money'],
                                         colour=discord.Colour(0x29485e))
                                     not_enough_money_embed.set_author(name="Economybot Register Error",
-                                                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                                                      icon_url=self.profile_picture)
                                     # send the embed
                                     await self.channel.send(embed=not_enough_money_embed)
                                 # if the sender has enough money
@@ -196,7 +197,7 @@ class EconomyBot(discord.Client):
                                         description="<@" + str(message.mentions[0].id) + "> you got " + sender_money_amount + " coins  💸  from <@" + str(money_sender.id) + ">",
                                         colour=discord.Colour(0x29485e))
                                     send_embed.set_author(name="Economybot Register Error",
-                                                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                                                      icon_url=self.profile_picture)
                                     # send the embed
                                     await self.channel.send(embed=send_embed)
                             # if the recipient hasnt registered yet
@@ -249,7 +250,7 @@ class EconomyBot(discord.Client):
                                 added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
                                                            colour=discord.Colour(0x29485e))
                                 added_embed.set_author(name="Economybot Coins",
-                                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                                      icon_url=self.profile_picture)
 
                                 await self.channel.send(embed=added_embed)
                                 break
@@ -308,7 +309,7 @@ class EconomyBot(discord.Client):
                                 added_embed = discord.Embed(title="Removed "+ str(sender_money_amount) + " coins  💸  from" , description="<@" + str(message.mentions[0].id) + ">",
                                                            colour=discord.Colour(0x29485e))
                                 added_embed.set_author(name="Economybot Removed Coins",
-                                                      icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                                      icon_url=self.profile_picture)
 
                                 await self.channel.send(embed=added_embed)
                                 break
@@ -343,7 +344,7 @@ class EconomyBot(discord.Client):
                     # write the embed
                     coin_embed = discord.Embed(title=coin_member.name + " has " + coins + " coins  💸", colour=discord.Colour(0x29485e))
                     coin_embed.set_thumbnail(url=coin_member.avatar_url)
-                    coin_embed.set_author(name="Economybot Coins", icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                    coin_embed.set_author(name="Economybot Coins", icon_url=self.profile_picture)
                     # send the embed
                     await self.channel.send(embed=coin_embed)
                 else:
@@ -368,7 +369,7 @@ class EconomyBot(discord.Client):
                                                colour=discord.Colour(0x29485e))
                     coin_embed.set_thumbnail(url=coin_member.avatar_url)
                     coin_embed.set_author(name="Economybot Coins",
-                                          icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                          icon_url=self.profile_picture)
                     # send the mebd
                     await self.channel.send(embed=coin_embed)
                 else:
@@ -404,7 +405,7 @@ class EconomyBot(discord.Client):
                                                     description="<@" + str(message.author.id) + '> you can now use the bot and get money 💸',
                                                     colour=discord.Colour(0x29485e))
                     registered_embed.set_author(name="Economybot Register",
-                                               icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                               icon_url=self.profile_picture)
                     await self.channel.send(embed=registered_embed)
 
         elif message.content == economybot_prefix + ' shop':
