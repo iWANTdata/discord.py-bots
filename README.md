@@ -7,6 +7,8 @@ Get your Bot-Token from [Discord Developer Portal](https://discord.com/developer
 * [Electionbot](https://github.com/Fynnyx/discord.py-bots#electionbot)
 * [Verifybot](https://github.com/Fynnyx/discord.py-bots#verifybot)
 * [Commandbot](https://github.com/Fynnyx/discord.py-bots#commandbot)
+* [Exonomybot](https://github.com/Fynnyx/discord.py-bots#economybot)
+* [bbot](https://github.com/Fynnyx/discord.py-bots#bbot)
 
 
 ##### ❗Warning❗
