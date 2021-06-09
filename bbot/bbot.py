@@ -39,7 +39,7 @@ class Bbot(discord.Client):
 
                     if message.content == (bbot_prefix + ' info'):
                         info_embed = discord.Embed(title="Here you can get the most information about this bot!",
-                                                   colour=discord.Colour(0x29485e))
+                                                   colour=discord.Colour(0x65158d))
 
                         info_embed.set_author(name="Electionbot Info",
                                               icon_url=self.profile_picture)
@@ -60,7 +60,7 @@ class Bbot(discord.Client):
                         await channel.send(embed=info_embed)
 
                     if message.content == bbot_prefix + ' help':
-                        help_embed = discord.Embed(title='Community Texturepack ‍🎨')
+                        help_embed = discord.Embed(title='Community Texturepack ‍🎨', colour=discord.Colour(0x65158d))
                         help_embed.set_author(name="Texturepackbot",
                                                        icon_url=self.profile_picture)
                         help_embed.add_field(name='textures',
@@ -83,7 +83,7 @@ class Bbot(discord.Client):
 
                         textures = data['textures']
 
-                        textures_embed = discord.Embed(title='Community Texturepack 🎨')
+                        textures_embed = discord.Embed(title='Community Texturepack 🎨', colour=discord.Colour(0x65158d))
                         textures_embed.set_author(name="Texturepackbot", icon_url=self.profile_picture)
 
                         for texture in textures:
@@ -95,11 +95,12 @@ class Bbot(discord.Client):
                             if member.id == 451776092785737728 or 758301777178918922:
                                     add_message = message.content
                                     get_description = add_message.split("'")
+                                    get_name = add_message.split('"')
                                     add_message = add_message.split(' ')
                                     range = len(add_message) - 1
                                     if range >= 5:
 
-                                        itemname = add_message[2]
+                                        itemname = get_name[1]
                                         description = get_description[1]
                                         user = add_message[range]
 
@@ -113,20 +114,20 @@ class Bbot(discord.Client):
                                         with open('textures.json', 'w', encoding='UTF-8') as f:
                                             f.write(json.dumps(data))
 
-                                        added_item_embed = discord.Embed(title='New Item added', description='Bbond hat eine neue Textur zum Texturepack hinzugefügt')
+                                        added_item_embed = discord.Embed(title='New Item added', description='Bbond hat eine neue Textur zum Texturepack hinzugefügt', colour=discord.Colour(0x65158d))
 
                                         added_item_embed.set_author(name="Texturepackbot",
                                               icon_url=self.profile_picture)
                                     else:
                                         add_error_embed = discord.Embed(title="Something went wrong",
                                                                         description="`" + bbot_prefix + "` add `itemname` `description` `für wen`",
-                                                                        colour=discord.Colour(0x29485e))
+                                                                        colour=discord.Colour(0x65158d))
                                         add_error_embed.set_author(name="Economybot Add Error",
                                                                     icon_url=self.profile_picture)
 
                                         await channel.send(embed=add_error_embed)
                 else:
-                    wrong_channel_embed = discord.Embed(title='Community Texturepack ‍🎨')
+                    wrong_channel_embed = discord.Embed(title='Community Texturepack ‍🎨', colour=discord.Colour(0x65158d))
                     wrong_channel_embed.set_author(name="Texturepackbot",
                                               icon_url=self.profile_picture)
                     wrong_channel_embed.add_field(name='Wrong Channel', value='Um den DC aufgeräumt zu halten benutze bitte den dafür vorhergesehene Channel')

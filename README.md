@@ -120,7 +120,8 @@ prefix | change the prefix
 ## Bbot
 
 ### What the bot do
-This bot is a bot for our minecraft community texturepack.
+This bot is a bot for our minecraft community texturepack. If you want to use it you have to understand it by yourself,
+bc i have configured it for us.
 
 ### How to setup the bot
 
@@ -137,13 +138,6 @@ prefix | change the prefix
 !bbot textures #sends all textures which are in the texturepack
 !bbot add [parameters] #adds a new Item to the list
 ```
-
-
-
-
-
-
-
 
 
 ## Example
