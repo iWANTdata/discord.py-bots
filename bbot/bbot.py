@@ -26,6 +26,7 @@ class Bbot(discord.Client):
 
     async def on_ready(self):
         self.profile_picture = client.user.avatar_url
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='bbond beim Pixeln zu'))
         print('Bbot: logged in')
 
     async def on_message(self, message):
@@ -67,7 +68,7 @@ class Bbot(discord.Client):
                                                 value='Mit `' + bbot_prefix + ' textures` kannst du alle texturen vom texturepack bekommen',
                                                 inline=True)
                         help_embed.add_field(name='add',
-                                                value="Bbond kann mit `" + bbot_prefix + " add` `itemname` `'description'` `zugehöhriger Spieler` neue Items hinzufügen.",
+                                                value="Bbond kann mit `" + bbot_prefix + ''' add` `"itemname"` `'description'` `zugehöhriger Spieler` neue Items hinzufügen.''',
                                                 inline=True)
                         help_embed.add_field(name='Fehler gefunden?',
                                              value='schreibe Bbond oder Fynnyx an sie ändern es',

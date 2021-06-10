@@ -11,8 +11,7 @@ https://github.com/Fynnyx/discord.py-bots
 
 # Imports
 import discord
-from discord import embeds
-from discord.utils import get
+import asyncio
 import json
 
 
@@ -36,6 +35,7 @@ class EconomyBot(discord.Client):
     # if the bot started
     async def on_ready(self):
         self.profile_picture = client.user.avatar_url
+        self.shop_status = 'item'
         await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='Fynnyx'))
         print('EconomyBot: logged in')
 
@@ -85,12 +85,70 @@ class EconomyBot(discord.Client):
         itemshop_embed.set_author(name="Economybot Shop",
                                   icon_url=self.profile_picture)
         for item in items_shop:
-            itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'],
+            itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'] + ' Price',
                                      value=data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
 
-        await self.channel.send(embed=itemshop_embed)
+        try:
+            await self.shop_message.delete()
+        except:
+            print('An Error occurred by deleting the message')
 
+        await asyncio.sleep(0.5)
 
+        self.shop_message = await self.channel.send(embed=itemshop_embed)
+
+        await self.shop_message.add_reaction('▶')
+
+    async def upgrade_shop(self):
+        with open("shop.json") as f:
+            data = json.load(f)
+
+        items_shop = data['shop']['UPGRADESHOP']['items']
+
+        upgradeshop_embed = discord.Embed(title="UPGRADESHOP", description="Buy items and use them later",
+                                       colour=discord.Colour(0x29485e))
+        upgradeshop_embed.set_author(name="Economybot Shop",
+                                  icon_url=self.profile_picture)
+        for item in items_shop:
+            upgradeshop_embed.add_field(name=data['shop']['UPGRADESHOP']['items'][item]['item_name'],
+                                     value=data['shop']['UPGRADESHOP']['items'][item]['description'], inline=True)
+
+        try:
+            await self.shop_message.delete()
+        except:
+            print('An Error occurred by deleting the message')
+
+        await asyncio.sleep(0.5)
+
+        self.shop_message = await self.channel.send(embed=upgradeshop_embed)
+
+        await self.shop_message.add_reaction('◀')
+        await self.shop_message.add_reaction('▶')
+
+    async def random_shop(self):
+        with open("shop.json") as f:
+            data = json.load(f)
+
+        items_shop = data['shop']['RANDOMSHOP']['items']
+
+        randomshop_embed = discord.Embed(title="RANDOMSHOP", description="Buy items and use them later",
+                                       colour=discord.Colour(0x29485e))
+        randomshop_embed.set_author(name="Economybot Shop",
+                                  icon_url=self.profile_picture)
+        for item in items_shop:
+            randomshop_embed.add_field(name=data['shop']['RANDOMSHOP']['items'][item]['item_name'],
+                                     value=data['shop']['RANDOMSHOP']['items'][item]['description'], inline=True)
+
+        try:
+            await self.shop_message.delete()
+        except:
+            print('An Error occurred by deleting the message')
+
+        await asyncio.sleep(0.5)
+
+        self.shop_message = await self.channel.send(embed=randomshop_embed)
+
+        await self.shop_message.add_reaction('◀')
 
 
     async def on_message(self, message):
@@ -394,7 +452,7 @@ class EconomyBot(discord.Client):
                 # if not registered
                 else:
                     # add a dict
-                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "inventory" : {"coconut" : "0", "Bronze Role" : "0"}}
+                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "inventory" : {"coconut" : "0"}}
 
                     # write it into the file
                     with open('users.json', 'w') as f:
@@ -409,7 +467,26 @@ class EconomyBot(discord.Client):
                     await self.channel.send(embed=registered_embed)
 
         elif message.content == economybot_prefix + ' shop':
-            await self.item_shop()
+                await self.item_shop()
+
+    async def on_reaction_add(self, reaction, user):
+        if user != client.user:
+            if self.shop_status == 'item' and str(reaction) == '▶':
+                self.shop_status = 'upgrade'
+                await self.upgrade_shop()
+
+            elif self.shop_status == 'upgrade' and str(reaction) == '◀':
+                self.shop_status = 'item'
+                await self.shop_status
+
+            elif self.shop_status == 'upgrade' and str(reaction) == '▶':
+                self.shop_status = 'random'
+                await self.random_shop()
+
+            elif self.shop_status == 'random' and str(reaction) == '◀':
+                self.shop_status = 'upgrade'
+                await self.upgrade_shop()
+
 
         
 
