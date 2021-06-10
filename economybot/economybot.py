@@ -144,6 +144,12 @@ class EconomyBot(discord.Client):
 
         await self.shop_message.add_reaction('◀')
 
+    # async def add_to_inventory(self, item, user_id):
+    #     with open("users.json") as f:
+    #         data = json.load(f)
+    #
+    #     if item in data['users'][]
+
 
     async def on_message(self, message):
         # get the channel where the message was sended
@@ -462,6 +468,42 @@ class EconomyBot(discord.Client):
 
         elif message.content == economybot_prefix + ' shop':
                 await self.item_shop()
+
+        elif message.content.startswith(economybot_prefix + ' buy'):
+            buy_message = str(message.content)
+            item_message = buy_message.split(' ')
+            item = item_message[2]
+
+            with open('users.json', 'r') as f:
+                data = json.load(f)
+
+            if item in data['shop']['ITEMSHOP']['items']:
+                await self.add_to_inventory(item, str(message.author.id))
+
+        elif message.content == economybot_prefix + 'inventory':
+            user = message.author
+
+            with open('users.json', 'r') as f:
+                data = json.load(f)
+
+            inventory = data['users'][str(user.id)]['inventory']
+
+            inventory_embed = data['shop']['ITEMSHOP']['items']
+
+            inventory_embed = discord.Embed(title="ITEMSHOP", description="Buy items and use them later",
+                                           colour=discord.Colour(0x29485e))
+            inventory_embed.set_author(name="Economybot Shop",
+                                      icon_url=self.profile_picture)
+            for item in inventory:
+                inventory_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'],
+                                         value='Price: ' + data['shop']['ITEMSHOP']['items'][item]['price'] + '  💸\n' +
+                                               data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
+
+
+
+
+
+            await self.channel.send('Wanna buy a ' + item)
 
     async def on_reaction_add(self, reaction, user):
         if user != client.user:
