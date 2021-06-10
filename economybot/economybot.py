@@ -85,15 +85,13 @@ class EconomyBot(discord.Client):
         itemshop_embed.set_author(name="Economybot Shop",
                                   icon_url=self.profile_picture)
         for item in items_shop:
-            itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'] + ' Price',
-                                     value=data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
+            itemshop_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'],
+                                     value='Price: ' + data['shop']['ITEMSHOP']['items'][item]['price'] + '  💸\n' + data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
 
         try:
             await self.shop_message.delete()
         except:
             print('An Error occurred by deleting the message')
-
-        await asyncio.sleep(0.5)
 
         self.shop_message = await self.channel.send(embed=itemshop_embed)
 
@@ -111,14 +109,12 @@ class EconomyBot(discord.Client):
                                   icon_url=self.profile_picture)
         for item in items_shop:
             upgradeshop_embed.add_field(name=data['shop']['UPGRADESHOP']['items'][item]['item_name'],
-                                     value=data['shop']['UPGRADESHOP']['items'][item]['description'], inline=True)
+                                     value='Price: ' + data['shop']['UPGRADESHOP']['items'][item]['price'] + '  💸\n' + data['shop']['UPGRADESHOP']['items'][item]['description'], inline=True)
 
         try:
             await self.shop_message.delete()
         except:
             print('An Error occurred by deleting the message')
-
-        await asyncio.sleep(0.5)
 
         self.shop_message = await self.channel.send(embed=upgradeshop_embed)
 
@@ -137,14 +133,12 @@ class EconomyBot(discord.Client):
                                   icon_url=self.profile_picture)
         for item in items_shop:
             randomshop_embed.add_field(name=data['shop']['RANDOMSHOP']['items'][item]['item_name'],
-                                     value=data['shop']['RANDOMSHOP']['items'][item]['description'], inline=True)
+                                     value='Price: ' + data['shop']['RANDOMSHOP']['items'][item]['price'] + '  💸\n' + data['shop']['RANDOMSHOP']['items'][item]['description'], inline=True)
 
         try:
             await self.shop_message.delete()
         except:
             print('An Error occurred by deleting the message')
-
-        await asyncio.sleep(0.5)
 
         self.shop_message = await self.channel.send(embed=randomshop_embed)
 
@@ -219,7 +213,7 @@ class EconomyBot(discord.Client):
                                 if int(money_sender_money) - int(sender_money_amount) < 0:
                                     # if he hasn't enough money
                                     not_enough_money_embed = discord.Embed(
-                                        title="You dont have enough money", description="<@" + str(message.mentions[0].id) + "> you only have " + data['users'][str(money_sender.id)]['money'],
+                                        title="You dont have enough money", description="<@" + str(message.mentions[0].id) + "> you only have " + data['users'][str(money_sender.id)]['money'] + ' 💸',
                                         colour=discord.Colour(0x29485e))
                                     not_enough_money_embed.set_author(name="Economybot Register Error",
                                                                       icon_url=self.profile_picture)
@@ -477,7 +471,7 @@ class EconomyBot(discord.Client):
 
             elif self.shop_status == 'upgrade' and str(reaction) == '◀':
                 self.shop_status = 'item'
-                await self.shop_status
+                await self.item_shop()
 
             elif self.shop_status == 'upgrade' and str(reaction) == '▶':
                 self.shop_status = 'random'
