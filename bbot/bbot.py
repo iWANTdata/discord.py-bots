@@ -70,6 +70,8 @@ class Bbot(discord.Client):
                         help_embed.add_field(name='add',
                                                 value="Bbond kann mit `" + bbot_prefix + ''' add` `"itemname"` `'description'` `zugehöhriger Spieler` neue Items hinzufügen.''',
                                                 inline=True)
+                        help_embed.add_field(name='downloads',
+                                             value='Mit `' + bbot_prefix + ' downloads` bekommst du den link zu der immer aktuellen version', inline=True)
                         help_embed.add_field(name='Fehler gefunden?',
                                              value='schreibe Bbond oder Fynnyx an sie ändern es',
                                              inline=False)
