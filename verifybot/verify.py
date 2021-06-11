@@ -32,6 +32,7 @@ class VerifyBot(discord.Client):
 
     # if the bot is ready
     async def on_ready(self):
+        self.profile_picture = client.user.avatar_url
         print('Verify: logged in')
 
     # if someone reacted
@@ -68,7 +69,7 @@ class VerifyBot(discord.Client):
                         # create the verify embed
                         verify_embed = discord.Embed(colour=discord.Colour(0x29485e), description="By clicking/tapping on " + verify_emoji + " below, you agree with the rules on this server. You can also verify by typing agree if clicking/tapping the reaction doesn't work.")
 
-                        verify_embed.set_author(name="Verify ", icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+                        verify_embed.set_author(name="Verify ", icon_url=self.profile_picture)
                         # send the embed
                         await channel.send(embed=verify_embed)
             
@@ -95,7 +96,7 @@ class VerifyBot(discord.Client):
             info_embed = discord.Embed(title="Here you can get the most information about this bot!",
                                        colour=discord.Colour(0x29485e))
             info_embed.set_author(name="Verifybot Info",
-                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                  icon_url=self.profile_picture)
             info_embed.add_field(name="General ❕:",
                                  value="In general this bot is a private project. I made the bot in my freetime.",
                                  inline=True)
@@ -117,7 +118,7 @@ class VerifyBot(discord.Client):
             help_embed = discord.Embed(colour=discord.Colour(0x29485e))
 
             help_embed.set_author(name="Verifybot Help",
-                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+                                  icon_url=self.profile_picture)
 
             help_embed.add_field(name="Send the verify button",
                                  value="With `" + verify_prefix + "` You can send the verify button.")
