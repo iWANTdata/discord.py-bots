@@ -27,6 +27,8 @@ economybot_decline: str = '❌'
 economybot_accept: str = '✔'
 economybot_role_bank_permission: str = 'Banker'
 
+inv_items = {"coconut" : "0", "banana" : "0"}
+
 
 # creates the class for the Election bot
 class EconomyBot(discord.Client):
@@ -144,11 +146,19 @@ class EconomyBot(discord.Client):
 
         await self.shop_message.add_reaction('◀')
 
-    # async def add_to_inventory(self, item, user_id):
-    #     with open("users.json") as f:
-    #         data = json.load(f)
-    #
-    #     if item in data['users'][]
+    async def add_to_inventory(self, item, user_id):
+        with open("users.json") as f:
+            data = json.load(f)
+
+        if item in data['users'][str(user_id)]['inventory']:
+            item_amount = data['users'][str(user_id)]['inventory'][str(item)]
+            item_amount = int(item_amount) + 1
+
+            data['users'][str(user_id)]['inventory'][str(item)] = item_amount
+
+        with open('users.json', 'w') as f:
+            f.write(json.dumps(data))
+
 
 
     async def on_message(self, message):
@@ -452,7 +462,7 @@ class EconomyBot(discord.Client):
                 # if not registered
                 else:
                     # add a dict
-                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "inventory" : {"coconut" : "0"}}
+                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "inventory" : inv_items}
 
                     # write it into the file
                     with open('users.json', 'w') as f:
@@ -480,7 +490,7 @@ class EconomyBot(discord.Client):
             if item in data['shop']['ITEMSHOP']['items']:
                 await self.add_to_inventory(item, str(message.author.id))
 
-        elif message.content == economybot_prefix + 'inventory':
+        elif message.content == economybot_prefix + ' inventory':
             user = message.author
 
             with open('users.json', 'r') as f:
@@ -488,22 +498,15 @@ class EconomyBot(discord.Client):
 
             inventory = data['users'][str(user.id)]['inventory']
 
-            inventory_embed = data['shop']['ITEMSHOP']['items']
-
-            inventory_embed = discord.Embed(title="ITEMSHOP", description="Buy items and use them later",
+            inventory_embed = discord.Embed(title="Inventory of " + str(user.name),
                                            colour=discord.Colour(0x29485e))
-            inventory_embed.set_author(name="Economybot Shop",
+            inventory_embed.set_author(name="Economybot inventory",
                                       icon_url=self.profile_picture)
             for item in inventory:
-                inventory_embed.add_field(name=data['shop']['ITEMSHOP']['items'][item]['item_name'],
-                                         value='Price: ' + data['shop']['ITEMSHOP']['items'][item]['price'] + '  💸\n' +
-                                               data['shop']['ITEMSHOP']['items'][item]['description'], inline=True)
+                inventory_embed.add_field(name=item,
+                                         value=data['users'][str(user.id)]['inventory'][item], inline=True)
 
-
-
-
-
-            await self.channel.send('Wanna buy a ' + item)
+            await self.channel.send(embed=inventory_embed)
 
     async def on_reaction_add(self, reaction, user):
         if user != client.user:
