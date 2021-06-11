@@ -484,7 +484,7 @@ class EconomyBot(discord.Client):
             item_message = buy_message.split(' ')
             item = item_message[2]
 
-            with open('users.json', 'r') as f:
+            with open('shop.json', 'r') as f:
                 data = json.load(f)
 
             if item in data['shop']['ITEMSHOP']['items']:
