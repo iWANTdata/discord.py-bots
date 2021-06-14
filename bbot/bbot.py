@@ -21,6 +21,7 @@ TOKEN = f.read()
 # variables to change
 bbot_channel: int = 851459857076584498
 bbot_prefix: str = '!bbot'
+bbot_permission = [451776092785737728, 758301777178918922, 526692364782272532, 853233996565577739]
 
 class Bbot(discord.Client):
 
@@ -73,7 +74,7 @@ class Bbot(discord.Client):
                         help_embed.add_field(name='downloads',
                                              value='Mit `' + bbot_prefix + ' downloads` bekommst du den link zu der immer aktuellen version', inline=True)
                         help_embed.add_field(name='Fehler gefunden?',
-                                             value='schreibe Bbond oder Fynnyx an sie ändern es',
+                                             value='schreibe Fynnyx, Bbond, Quacky oder notmappy an, sie können es ändern',
                                              inline=False)
 
                         await channel.send(embed=help_embed)
@@ -95,7 +96,7 @@ class Bbot(discord.Client):
                         await channel.send(embed=textures_embed)
 
                     if message.content.startswith(bbot_prefix + ' add'):
-                            if member.id == 451776092785737728 or 758301777178918922:
+                            if member.id in bbot_permission:
                                     add_message = message.content
                                     get_description = add_message.split("'")
                                     get_name = add_message.split('"')
@@ -127,10 +128,19 @@ class Bbot(discord.Client):
                                         add_error_embed = discord.Embed(title="Something went wrong",
                                                                         description="`" + bbot_prefix + "` add `itemname` `description` `für wen`",
                                                                         colour=discord.Colour(0x65158d))
-                                        add_error_embed.set_author(name="Economybot Add Error",
+                                        add_error_embed.set_author(name="Texturepackbot",
                                                                     icon_url=self.profile_picture)
 
                                         await channel.send(embed=add_error_embed)
+                            else:
+                                no_permission_embed = discord.Embed(title="Permission Error",
+                                                                description="Du hast keine Rechte zum hinzufügen von Items. Frage Bbond oder Quacky",
+                                                                colour=discord.Colour(0x65158d))
+                                no_permission_embed.set_author(name="Texturepackbot",
+                                                                icon_url=self.profile_picture)
+
+                                await channel.send(embed=no_permission_embed)
+
 
                     if message.content == bbot_prefix + ' downloads':
                         download_embed = discord.Embed(title='Community Texturepack ‍🎨', colour=discord.Colour(0x65158d))
