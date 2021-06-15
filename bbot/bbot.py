@@ -11,8 +11,6 @@ https://github.com/Fynnyx/discord.py-bots
 # Imports
 import discord
 import asyncio
-from discord import embeds
-from discord.utils import get
 import json
 
 # gets the Token from .env (more infos in README and .env.example)
@@ -169,6 +167,22 @@ class Bbot(discord.Client):
 
                             if del_item in data['textures']:
                                 data['textures'].pop(del_item)
+
+                                delete_embed = discord.Embed(title='Community Texturepack ‍🎨',
+                                                               colour=discord.Colour(0x65158d))
+                                delete_embed.add_field(name='Item deleted',
+                                                         value=del_item + ' wurde gelöscht',
+                                                         inline=False)
+                                await channel.send(embed=delete_embed)
+
+                            else:
+                                no_item_embed = discord.Embed(title="Search Error",
+                                                                    description="Das gewünschte Item wurde nicht gefunden",
+                                                                    colour=discord.Colour(0x65158d))
+                                no_item_embed.set_author(name="Texturepackbot",
+                                                               icon_url=self.profile_picture)
+
+                                await channel.send(embed=no_item_embed)
 
                             with open('textures.json', 'w') as f:
                                 data = json.dump(data, f, indent=2)
