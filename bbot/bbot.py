@@ -20,7 +20,7 @@ f = open(".env")
 TOKEN = f.read()
 
 # variables to change
-bbot_channel: int = 851459857076584498
+bbot_channel: int = 850646620655058944
 bbot_prefix: str = '!bbot'
 bbot_permission = [451776092785737728, 758301777178918922, 526692364782272532, 853233996565577739]
 
