@@ -160,8 +160,6 @@ class Bbot(discord.Client):
                             del_message_split = del_message.split('"')
                             del_item = str(del_message_split[1])
 
-                            print(del_item)
-
                             with open('textures.json') as f:
                                 data = json.load(f)
 
