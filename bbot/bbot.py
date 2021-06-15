@@ -148,7 +148,7 @@ class Bbot(discord.Client):
                     if message.content == bbot_prefix + ' downloads':
                         download_embed = discord.Embed(title='Community Texturepack ‍🎨', colour=discord.Colour(0x65158d))
                         download_embed.add_field(name='Demo Version', value='https://www.mediafire.com/file/6mwrqpi4idmyf2b/%25C2%25A76%25C2%25A7lKahlifar_%25C2%25A76%25C2%25A7lDemo_%25C2%25A7a%25C2%25A7lPack.zip/file', inline=False)
-                        download_embed.add_field(name='Vollversion 1.16 vom 06.15.2021', value='https://www.mediafire.com/file/lig23e0siumrdhr/Kahlifar+Pack+1.1+for+1.16.zip/file', inline=False)
+                        download_embed.add_field(name='Vollversion 1.16 vom 06.15.2021', value='https://www.mediafire.com/file/lig23e0siumrdhr/Kahlifar_Pack_1.1_for_1.16.zip/file', inline=False)
                         download_embed.add_field(name='Vollversion 1.17 vom 06.15.2021', value='https://www.mediafire.com/file/mgsufz7w74h3mt5/Kahlifar_Pack_1.1_for_1.17.zip/file', inline=False)
 
                         await channel.send(embed=download_embed)
