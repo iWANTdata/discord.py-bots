@@ -10,6 +10,7 @@ https://github.com/Fynnyx/discord.py-bots
 
 # Imports
 import discord
+import asyncio
 from discord import embeds
 from discord.utils import get
 import json
@@ -19,7 +20,7 @@ f = open(".env")
 TOKEN = f.read()
 
 # variables to change
-bbot_channel: int = 850646620655058944
+bbot_channel: int = 851459857076584498
 bbot_prefix: str = '!bbot'
 bbot_permission = [451776092785737728, 758301777178918922, 526692364782272532, 853233996565577739]
 
@@ -68,11 +69,15 @@ class Bbot(discord.Client):
                         help_embed.add_field(name='textures',
                                                 value='Mit `' + bbot_prefix + ' textures` kannst du alle texturen vom texturepack bekommen',
                                                 inline=True)
-                        help_embed.add_field(name='add',
-                                                value="Bbond kann mit `" + bbot_prefix + ''' add` `"itemname"` `'description'` `zugehöhriger Spieler` neue Items hinzufügen.''',
-                                                inline=True)
+
                         help_embed.add_field(name='downloads',
                                              value='Mit `' + bbot_prefix + ' downloads` bekommst du den link zu der immer aktuellen version', inline=True)
+                        help_embed.add_field(name='add',
+                                             value="Bbond kann mit `" + bbot_prefix + ''' add` `"itemname"` `'description'` `zugehöhriger Spieler` neue Items hinzufügen.''',
+                                             inline=True)
+                        help_embed.add_field(name='delete',
+                                             value="Pack Developer können mit `" + bbot_prefix + ''' delete` `"itemname"` Items wieder löschen''',
+                                             inline=True)
                         help_embed.add_field(name='Fehler gefunden?',
                                              value='schreibe Fynnyx, Bbond, Quacky oder notmappy an, sie können es ändern',
                                              inline=False)
@@ -116,7 +121,7 @@ class Bbot(discord.Client):
                                         data['textures'][str(itemname)] = {'name' : str(itemname), 'description' : str(description)}
 
                                         with open('textures.json', 'w', encoding='UTF-8') as f:
-                                            f.write(json.dumps(data))
+                                            f.write(json.dumps(data, indent=2))
 
                                         added_item_embed = discord.Embed(title='New Item added', description='Bbond hat eine neue Textur zum Texturepack hinzugefügt \n **' + str(itemname) + '**', colour=discord.Colour(0x65158d))
 
@@ -150,6 +155,34 @@ class Bbot(discord.Client):
 
                         await channel.send(embed=download_embed)
 
+
+                    if message.content.startswith(bbot_prefix + ' delete'):
+                        if member.id in bbot_permission:
+                            del_message = str(message.content)
+                            del_message_split = del_message.split('"')
+                            del_item = str(del_message_split[1])
+
+                            print(del_item)
+
+                            with open('textures.json') as f:
+                                data = json.load(f)
+
+                            if del_item in data['textures']:
+                                data['textures'].pop(del_item)
+
+                            with open('textures.json', 'w') as f:
+                                data = json.dump(data, f, indent=2)
+
+                        else:
+                            no_permission_embed = discord.Embed(title="Permission Error",
+                                                                description="Du hast keine Rechte zum hinzufügen von Items. Frage Bbond oder Quacky",
+                                                                colour=discord.Colour(0x65158d))
+                            no_permission_embed.set_author(name="Texturepackbot",
+                                                           icon_url=self.profile_picture)
+
+                            await channel.send(embed=no_permission_embed)
+
+
                 else:
                     wrong_channel_embed = discord.Embed(title='Community Texturepack ‍🎨', colour=discord.Colour(0x65158d))
                     wrong_channel_embed.set_author(name="Texturepackbot",
@@ -158,7 +191,11 @@ class Bbot(discord.Client):
 
                     await message.delete()
 
-                    await channel.send(embed=wrong_channel_embed)
+                    message =  await channel.send(embed=wrong_channel_embed)
+
+                    await asyncio.sleep(3)
+
+                    await message.delete()
 
 client = Bbot()
 client.run(TOKEN)

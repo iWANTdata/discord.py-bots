@@ -157,7 +157,7 @@ class EconomyBot(discord.Client):
             data['users'][str(user_id)]['inventory'][str(item)] = item_amount
 
         with open('users.json', 'w') as f:
-            f.write(json.dumps(data))
+            f.write(json.dumps(data, indent=2))
 
 
 
@@ -246,7 +246,7 @@ class EconomyBot(discord.Client):
 
                                     # write it in the file
                                     with open('users.json', 'w') as f:
-                                        f.write(json.dumps(data))
+                                        f.write(json.dumps(data, indent=2))
 
                                     # get the moneyamount from the sender
                                     money_sender_money = data['users'][str(money_sender.id)]['money']
@@ -257,7 +257,7 @@ class EconomyBot(discord.Client):
 
                                     # write it in the file
                                     with open('users.json', 'w') as f:
-                                        f.write(json.dumps(data))
+                                        f.write(json.dumps(data, indent=2))
 
                                     # embed that the money has been send
                                     send_embed = discord.Embed(
@@ -312,7 +312,7 @@ class EconomyBot(discord.Client):
 
                                 # write it into the file
                                 with open('users.json', 'w') as f:
-                                    f.write(json.dumps(data))
+                                    f.write(json.dumps(data, indent=2))
 
                                 # say that money has been send
                                 added_embed = discord.Embed(title="Added "+ str(sender_money_amount) + " coins  💸  to" , description="<@" + str(message.mentions[0].id) + ">",
@@ -371,7 +371,7 @@ class EconomyBot(discord.Client):
 
                                 # write it into the file
                                 with open('users.json', 'w') as f:
-                                    f.write(json.dumps(data))
+                                    f.write(json.dumps(data, indent=2))
 
                                 # send what has been removed
                                 added_embed = discord.Embed(title="Removed "+ str(sender_money_amount) + " coins  💸  from" , description="<@" + str(message.mentions[0].id) + ">",
@@ -466,7 +466,7 @@ class EconomyBot(discord.Client):
 
                     # write it into the file
                     with open('users.json', 'w') as f:
-                        f.write(json.dumps(data))
+                        f.write(json.dumps(data, indent=2))
 
                     # welcome the new user
                     registered_embed = discord.Embed(title="Welcome ❤",
