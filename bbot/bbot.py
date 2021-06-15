@@ -168,11 +168,9 @@ class Bbot(discord.Client):
                             if del_item in data['textures']:
                                 data['textures'].pop(del_item)
 
-                                delete_embed = discord.Embed(title='Community Texturepack ‍🎨',
+                                delete_embed = discord.Embed(title='Item deleted', description=del_item + ' wurde gelöscht',
                                                                colour=discord.Colour(0x65158d))
-                                delete_embed.add_field(name='Item deleted',
-                                                         value=del_item + ' wurde gelöscht',
-                                                         inline=False)
+                                delete_embed.set_author(name='Texturepackbot')
                                 await channel.send(embed=delete_embed)
 
                             else:
