@@ -67,10 +67,34 @@ class EconomyBot(discord.Client):
 
         await self.channel.send(embed=pls_register_embed)
 
-    async def something_went_wrong(self):
+    async def something_went_wrong_add_remove(self):
         add_error_embed = discord.Embed(
                                 title="Something went wrong", 
                                 description="`" + economybot_prefix + "` add/remove `@member` `amount`",
+                                colour=discord.Colour(0x29485e))
+
+        add_error_embed.set_author(
+                                name="Economybot Add Error",
+                                icon_url=self.profile_picture)
+
+        await self.channel.send(embed=add_error_embed)
+
+    async def something_went_wrong_use(self):
+        add_error_embed = discord.Embed(
+                                title="Something went wrong", 
+                                description="`" + economybot_prefix + "` `use` `item`",
+                                colour=discord.Colour(0x29485e))
+
+        add_error_embed.set_author(
+                                name="Economybot Add Error",
+                                icon_url=self.profile_picture)
+
+        await self.channel.send(embed=add_error_embed)
+
+    async def cant_find_item(self):
+        add_error_embed = discord.Embed(
+                                title="Cant find this item", 
+                                description="Check your spelling and try again",
                                 colour=discord.Colour(0x29485e))
 
         add_error_embed.set_author(
@@ -388,11 +412,11 @@ class EconomyBot(discord.Client):
                                 break
                         # if the command is not right
                         else:
-                            await self.something_went_wrong()
+                            await self.something_went_wrong_add_remove()
                             break
                     # if th command is not right
                     else:
-                        await self.something_went_wrong()
+                        await self.something_went_wrong_add_remove()
                         break
 
         # if someone has to much money :)
@@ -421,11 +445,11 @@ class EconomyBot(discord.Client):
 
                         # if the command is false
                         else:
-                            await self.something_went_wrong()
+                            await self.something_went_wrong_add_remove()
                             break
                     # if the command is wrong
                     else:
-                        await self.something_went_wrong()
+                        await self.something_went_wrong_add_remove()
                         break
 
         # to get the amount of coins from a user
@@ -569,6 +593,46 @@ class EconomyBot(discord.Client):
                                          value=data['users'][str(user.id)]['inventory'][item], inline=True)
 
             await self.channel.send(embed=inventory_embed)
+
+        elif message.content.startswith(economybot_prefix + ' use'):
+            channel = message.channel
+
+            user = message.author
+            use_message = str(message.content)
+            item_message = use_message.split(' ')
+            item = item_message[2]
+
+            with open('users.json', 'r') as f:
+                data = json.load(f)
+
+            if item in data['users'][str(user.id)]['inventory']:
+                if int(data['users'][str(user.id)]['inventory'][item]) > 0:
+
+                    item_amount = int(data['users'][str(user.id)]['inventory'][item])
+                    
+                    if item == 'coconut':
+                        await channel.send('And now you have to open it')
+                        await asyncio.sleep(2)
+                        await channel.send('Just a Joke. You can it is still open :coconut:')
+
+                    if item == 'banana':
+                        await channel.send('enojy your meal <@' + str(user.id) + ">")
+
+
+                    item_amount = item_amount - 1
+
+                    data['users'][str(user.id)]['inventory'][item] = item_amount
+
+                    with open('users.json', 'w') as f:
+                        f.write(json.dumps(data, indent=2))
+
+                else:
+                    self.cant_find_item()
+            else:
+                self.something_went_wrong_use()
+
+
+
 
     async def on_reaction_add(self, reaction, user):
         if user != client.user:
