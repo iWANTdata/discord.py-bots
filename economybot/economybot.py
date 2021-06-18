@@ -27,6 +27,9 @@ economybot_decline: str = '❌'
 economybot_accept: str = '✔'
 economybot_role_bank_permission: str = 'Banker'
 
+economybot_role_lvl1 = 855021146889650177
+economybot_role_lvl2 = 855081293742080013
+
 inv_items = {"coconut" : "0", "banana" : "0"}
 
 
@@ -160,6 +163,62 @@ class EconomyBot(discord.Client):
             f.write(json.dumps(data, indent=2))
 
 
+    async def remove_money(self, user, amount):
+        # opne the json file
+        with open('users.json') as f:
+            data = json.load(f)
+        # if the recipient is registered
+        if str(user) in data['users']:
+            # get the money amount from the recipient
+            money_recipent_money = data['users'][str(user)]['money']
+            # remove the money from the bank acc
+            money_amount = int(money_recipent_money) - int(amount)
+            # write it into the dict
+            data['users'][str(user)]['money'] = str(money_amount)
+
+            # write it into the file
+            with open('users.json', 'w') as f:
+                f.write(json.dumps(data, indent=2))
+
+            # send what has been removed
+            added_embed = discord.Embed(title="Removed " + str(amount) + " coins  💸  from",
+                                        description="<@" + str(user) + ">",
+                                        colour=discord.Colour(0x29485e))
+            added_embed.set_author(name="Economybot Removed Coins",
+                                   icon_url=self.profile_picture)
+
+            await self.channel.send(embed=added_embed)
+
+        else:
+            await self.not_registered_error_other(str(user))
+
+    async def remove_money_shop(self, user, amount, item):
+        user = str(user.id)
+        # opne the json file
+        with open('users.json') as f:
+            data = json.load(f)
+        # if the recipient is registered
+        if str(user) in data['users']:
+            # get the money amount from the recipient
+            money_recipent_money = data['users'][str(user)]['money']
+            # remove the money from the bank acc
+            money_amount = int(money_recipent_money) - int(amount)
+            # write it into the dict
+            data['users'][str(user)]['money'] = str(money_amount)
+
+            # write it into the file
+            with open('users.json', 'w') as f:
+                f.write(json.dumps(data, indent=2))
+
+            bought_embed = discord.Embed(title="You bought ",
+                                        description="`" + item + "` for " + amount + "   💸",
+                                        colour=discord.Colour(0x29485e))
+            bought_embed.set_author(name="Economybot Removed Coins",
+                                   icon_url=self.profile_picture)
+
+            await self.channel.send(embed=bought_embed)
+        else:
+            await self.not_registered_error_you(user)
 
     async def on_message(self, message):
         # get the channel where the message was sended
@@ -357,34 +416,9 @@ class EconomyBot(discord.Client):
                             # defin the amount of money
                             sender_money_amount = add_message[int(range)]
 
-                            # opne the json file
-                            with open('users.json') as f:
-                                data = json.load(f)
-                            # if the recipient is registered
-                            if str(money_recipent) in data['users']:
-                                # get the money amount from the recipient
-                                money_recipent_money = data['users'][money_recipent]['money']
-                                # remove the money from the bank acc
-                                money_amount = int(money_recipent_money) - int(sender_money_amount)
-                                # write it into the dict
-                                data['users'][money_recipent]['money'] = str(money_amount)
+                            await self.remove_money(message.mentions[0].id ,sender_money_amount)
 
-                                # write it into the file
-                                with open('users.json', 'w') as f:
-                                    f.write(json.dumps(data, indent=2))
 
-                                # send what has been removed
-                                added_embed = discord.Embed(title="Removed "+ str(sender_money_amount) + " coins  💸  from" , description="<@" + str(message.mentions[0].id) + ">",
-                                                           colour=discord.Colour(0x29485e))
-                                added_embed.set_author(name="Economybot Removed Coins",
-                                                      icon_url=self.profile_picture)
-
-                                await self.channel.send(embed=added_embed)
-                                break
-                            # if the recipient isn't registered
-                            else:
-                                await self.not_registered_error_other(str(message.mentions[0].id))
-                                break
                         # if the command is false
                         else:
                             await self.something_went_wrong()
@@ -480,6 +514,8 @@ class EconomyBot(discord.Client):
                 await self.item_shop()
 
         elif message.content.startswith(economybot_prefix + ' buy'):
+            user = message.author
+
             buy_message = str(message.content)
             item_message = buy_message.split(' ')
             item = item_message[2]
@@ -488,7 +524,33 @@ class EconomyBot(discord.Client):
                 data = json.load(f)
 
             if item in data['shop']['ITEMSHOP']['items']:
-                await self.add_to_inventory(item, str(message.author.id))
+                if data['shop']['ITEMSHOP']['items'][item]['type'] == 'role':
+                    self.lvl1_role = discord.utils.get(member.guild.roles, id=economybot_role_lvl1)
+                    # for role in user.roles:
+                    if self.lvl1_role in user.roles:
+                        has_the_role_embed = discord.Embed(
+                            title="You still have this Role",
+                            colour=discord.Colour(0x29485e))
+                        has_the_role_embed.set_author(
+                            name="Economybot Role Error",
+                            icon_url=self.profile_picture)
+                        await self.channel.send(embed=has_the_role_embed)
+                    else:
+                        with open('shop.json', 'r') as f:
+                            data = json.load(f)
+
+                        amount = data['shop']['ITEMSHOP']['items'][str(item)]['price']
+
+                        await user.add_roles(self.lvl1_role)
+
+                        await self.remove_money_shop(user, amount, item)
+
+
+                else:
+                    await self.add_to_inventory(item, str(message.author.id))
+
+            else:
+                print('Cant find this item')
 
         elif message.content == economybot_prefix + ' inventory':
             user = message.author
