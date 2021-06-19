@@ -245,6 +245,76 @@ class EconomyBot(discord.Client):
         else:
             await self.not_registered_error_you(user)
 
+    async def start_work(self, user_id, where):
+        with open('users.json', 'r') as f:
+                data = json.load(f)
+
+        data['users'][str(user_id)]['is_working'] = "is_working"
+        with open('users.json', 'w') as f:
+            f.write(json.dumps(data, indent=2))
+
+        amount = random.randint(150, 250)
+
+        data['users'][str(user_id)]['amount'] = str(amount)
+        with open('users.json', 'w') as f:
+            f.write(json.dumps(data, indent=2))
+
+        if where == "work":
+            started_working_embed = discord.Embed(title="You started working",
+                                            description="Come back in one hour to earn your reward of " + str(amount) + "   💸",
+                                            colour=discord.Colour(0x29485e))
+            started_working_embed.set_author(name="Economybot Work",
+                                       icon_url=self.profile_picture)
+            await self.channel.send(embed=started_working_embed)
+
+        await asyncio.sleep(10)
+
+        data['users'][str(user_id)]['is_working'] = "is_done"
+        with open('users.json', 'w') as f:
+            f.write(json.dumps(data, indent=2))
+
+    async def done_work(self, user_id, where):
+        with open('users.json', 'r') as f:
+                data = json.load(f)
+
+        with open('users.json', 'w') as f:
+            f.write(json.dumps(data, indent=2))
+
+        amount = int(data['users'][str(user_id)]['amount'])
+        user_money = int(data['users'][str(user_id)]['money'])
+
+        full_amount = user_money + amount
+
+        data['users'][str(user_id)]['money'] = str(full_amount)
+
+        # write it into the file
+        with open('users.json', 'w') as f:
+            f.write(json.dumps(data, indent=2))
+
+        data['users'][str(user_id)]['is_working'] = "is_ready"
+        with open('users.json', 'w') as f:
+            f.write(json.dumps(data, indent=2))
+        
+        if where == 'again':
+
+            done_work_again_embed = discord.Embed(title="You are done with working",
+                                            description="You earned " + str(amount) + "   💸 and started again",
+                                            colour=discord.Colour(0x29485e))
+            done_work_again_embed.set_author(name="Economybot Done Work",
+                                       icon_url=self.profile_picture)
+            await self.channel.send(embed=done_work_again_embed)
+
+            await self.start_work(str(user_id), "again")    
+
+        elif where == 'claim':
+            done_work_claim_embed = discord.Embed(title="You claimed your coins",
+                                            description="You earned " + str(amount) + "   💸 \n start again by user `" + economybot_prefix + " work`",
+                                            colour=discord.Colour(0x29485e))
+            done_work_claim_embed.set_author(name="Economybot Claimed Coins",
+                                       icon_url=self.profile_picture)
+            await self.channel.send(embed=done_work_claim_embed)
+        
+
     async def on_message(self, message):
         # get the channel where the message was sended
         self.channel = message.channel
@@ -521,7 +591,7 @@ class EconomyBot(discord.Client):
                 # if not registered
                 else:
                     # add a dict
-                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "is_working" : "is_ready", "inventory" : inv_items}
+                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "is_working" : "is_ready", "amount" : "0", "inventory" : inv_items}
 
                     # write it into the file
                     with open('users.json', 'w') as f:
@@ -641,31 +711,7 @@ class EconomyBot(discord.Client):
             if str(user.id) in data['users']:
 
                 if data['users'][str(user.id)]['is_working'] == "is_ready":
-
-                    data['users'][str(user.id)]['is_working'] = "is_working"
-                    with open('users.json', 'w') as f:
-                        f.write(json.dumps(data, indent=2))
-
-                    amount = random.randint(150, 250)
-
-                    started_working_embed = discord.Embed(title="You started working",
-                                                    description="Come back in one hour to earn your reward of " + str(amount) + "   💸",
-                                                    colour=discord.Colour(0x29485e))
-                    started_working_embed.set_author(name="Economybot Work",
-                                               icon_url=self.profile_picture)
-                    await self.channel.send(embed=started_working_embed)
-
-                    await asyncio.sleep(5)
-
-                    user_money = int(data['users'][str(user.id)]['money'])
-
-                    amount = user_money + amount
-
-                    data['users'][str(user.id)]['money'] = str(amount)
-
-                    # write it into the file
-                    with open('users.json', 'w') as f:
-                        f.write(json.dumps(data, indent=2))
+                    await self.start_work(str(user.id), "work")
 
 
                 elif data['users'][str(user.id)]['is_working'] == "is_working":
@@ -677,14 +723,56 @@ class EconomyBot(discord.Client):
                                                icon_url=self.profile_picture)
                     await self.channel.send(embed=still_working_embed)
 
-                # elif data['users'][str(user.id)]['is_working'] == "is_done":
+                elif data['users'][str(user.id)]['is_working'] == "is_done":
+                    with open('users.json', 'w') as f:
+                        f.write(json.dumps(data, indent=2))
+
+                    amount = int(data['users'][str(user.id)]['amount'])
+                    user_money = int(data['users'][str(user.id)]['money'])
+
+                    full_amount = user_money + amount
+
+                    data['users'][str(user.id)]['money'] = str(full_amount)
+
+                    # write it into the file
+                    with open('users.json', 'w') as f:
+                        f.write(json.dumps(data, indent=2))
+
+                    data['users'][str(user.id)]['is_working'] = ""
+                    with open('users.json', 'w') as f:
+                        f.write(json.dumps(data, indent=2))
+
+                    still_working_embed = discord.Embed(title="You are done with working",
+                                                    description="You earned " + str(amount) + "   💸 and started again",
+                                                    colour=discord.Colour(0x29485e))
+                    still_working_embed.set_author(name="Economybot Work Error",
+                                               icon_url=self.profile_picture)
+                    await self.channel.send(embed=still_working_embed)
+
+                    await self.start_work(str(user.id), "again")
 
 
-            
+
             else:
                 self.not_registered_error_you(user.id)
 
+        elif message.content == economybot_prefix + ' work claim':
+            user = message.author
 
+            with open('users.json', 'r') as f:
+                data = json.load(f)
+
+            if data['users'][str(user.id)]['is_working'] == "is_done":
+          
+                await self.done_work(str(user.id), 'claim')
+
+            else:
+                still_working_embed = discord.Embed(title="You are still working",
+                                                    description="Come back in when you are done with working to earn the reward",
+                                                    colour=discord.Colour(0x29485e))
+                still_working_embed.set_author(name="Economybot Work Error",
+                                           icon_url=self.profile_picture)
+                await self.channel.send(embed=still_working_embed)
 
 
 
