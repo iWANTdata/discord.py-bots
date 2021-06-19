@@ -13,6 +13,7 @@ https://github.com/Fynnyx/discord.py-bots
 import discord
 import asyncio
 import json
+import random
 
 
 # gets the Token from .env (more infos in README and .env.example)
@@ -520,7 +521,7 @@ class EconomyBot(discord.Client):
                 # if not registered
                 else:
                     # add a dict
-                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "inventory" : inv_items}
+                    data['users'][str(user.id)] = {'dc_id' : str(user.id), 'money' : '0', "is_working" : "is_ready", "inventory" : inv_items}
 
                     # write it into the file
                     with open('users.json', 'w') as f:
@@ -630,6 +631,60 @@ class EconomyBot(discord.Client):
                     self.cant_find_item()
             else:
                 self.something_went_wrong_use()
+
+        elif message.content == economybot_prefix + ' work':
+            user = message.author
+
+            with open('users.json', 'r') as f:
+                data = json.load(f)
+
+            if str(user.id) in data['users']:
+
+                if data['users'][str(user.id)]['is_working'] == "is_ready":
+
+                    data['users'][str(user.id)]['is_working'] = "is_working"
+                    with open('users.json', 'w') as f:
+                        f.write(json.dumps(data, indent=2))
+
+                    amount = random.randint(150, 250)
+
+                    started_working_embed = discord.Embed(title="You started working",
+                                                    description="Come back in one hour to earn your reward of " + str(amount) + "   💸",
+                                                    colour=discord.Colour(0x29485e))
+                    started_working_embed.set_author(name="Economybot Work",
+                                               icon_url=self.profile_picture)
+                    await self.channel.send(embed=started_working_embed)
+
+                    await asyncio.sleep(5)
+
+                    user_money = int(data['users'][str(user.id)]['money'])
+
+                    amount = user_money + amount
+
+                    data['users'][str(user.id)]['money'] = str(amount)
+
+                    # write it into the file
+                    with open('users.json', 'w') as f:
+                        f.write(json.dumps(data, indent=2))
+
+
+                elif data['users'][str(user.id)]['is_working'] == "is_working":
+
+                    still_working_embed = discord.Embed(title="You are still working",
+                                                    description="Come back in when you are done with working to earn the reward",
+                                                    colour=discord.Colour(0x29485e))
+                    still_working_embed.set_author(name="Economybot Work Error",
+                                               icon_url=self.profile_picture)
+                    await self.channel.send(embed=still_working_embed)
+
+                # elif data['users'][str(user.id)]['is_working'] == "is_done":
+
+
+            
+            else:
+                self.not_registered_error_you(user.id)
+
+
 
 
 
