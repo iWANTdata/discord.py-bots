@@ -24,8 +24,6 @@ TOKEN = f.read()
 economybot_channel: int = 841768678940213270
 economybot_guild_id: int = 840237524982956072
 economybot_prefix: str = '!economybot'
-economybot_decline: str = '❌'
-economybot_accept: str = '✔'
 economybot_role_bank_permission: str = 'Banker'
 
 economybot_role_lvl1 = 855021146889650177
