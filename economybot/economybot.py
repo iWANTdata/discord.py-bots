@@ -265,7 +265,7 @@ class EconomyBot(discord.Client):
                                        icon_url=self.profile_picture)
             await self.channel.send(embed=started_working_embed)
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(3600)
 
         data['users'][str(user_id)]['is_working'] = "is_done"
         with open('users.json', 'w') as f:
