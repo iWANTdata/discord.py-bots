@@ -21,11 +21,14 @@
 - [x] add money (only Admin)
 - [x] remove money (only Admin)  
 - [x] give money
-- [ ] Whole shop system
-  - [ ] shop command
+- [x] Whole shop system
+  - [x] shop command
 - [ ] Whole work system
-- [ ] change Embed url
-- [ ] if member in json file
+  - [x] work command
+  - [x] add money after a time
+  - [ ] only get the money if it got claimed
+- [x] change Embed url
+- [x] if member in json file
 
 ## Commandbot
 
