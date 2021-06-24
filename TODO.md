@@ -23,12 +23,16 @@
 - [x] give money
 - [x] Whole shop system
   - [x] shop command
-- [ ] Whole work system
+- [x] Whole work system
   - [x] work command
   - [x] add money after a time
   - [x] only get the money if it got claimed
 - [x] change Embed url
 - [x] if member in json file
+
+## Casinobot
+
+
 
 ## Commandbot
 

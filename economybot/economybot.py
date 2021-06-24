@@ -1,12 +1,12 @@
-''' 
+"""
 # -----------------------------------------------------------------------------------------------------------------------------------
 Author: Fynn Westerath
-Last Change: 07.06.2021
+Last Change: 14.06.2021
 (c) Copyright. Not for commercial use. All rights reserved
 GitHub
 https://github.com/Fynnyx/discord.py-bots
 # -----------------------------------------------------------------------------------------------------------------------------------
-'''
+"""
 
 
 # Imports
@@ -29,7 +29,7 @@ economybot_role_bank_permission: str = 'Banker'
 economybot_role_lvl1 = 855021146889650177
 economybot_role_lvl2 = 855081293742080013
 
-inv_items = {"coconut" : "0", "banana" : "0"}
+inv_items = {"coconut": "0", "banana": "0"}
 
 
 # creates the class for the Election bot
@@ -696,9 +696,9 @@ class EconomyBot(discord.Client):
                         f.write(json.dumps(data, indent=2))
 
                 else:
-                    self.cant_find_item()
+                    await self.cant_find_item()
             else:
-                self.something_went_wrong_use()
+                await self.something_went_wrong_use()
 
         elif message.content == economybot_prefix + ' work':
             user = message.author
