@@ -1,11 +1,11 @@
 """
-# -----------------------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 Author: Fynn Westerath
 Last Change: 14.06.2021
 (c) Copyright. Not for commercial use. All rights reserved
 GitHub
 https://github.com/Fynnyx/discord.py-bots
-# -----------------------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 """
 
 
@@ -321,7 +321,24 @@ class EconomyBot(discord.Client):
 
         # if the help command got called
         if message.content == (economybot_prefix + ' help'):
-            print('Help')
+            # create the embed for help
+            help_embed = discord.Embed(colour=discord.Colour(0x29485e))
+
+            help_embed.set_author(name="Electionbot Help",
+                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+            help_embed.add_field(name="Start working",
+                                 value="With `" + economybot_prefix + " work` you can start to work. If you are done with working you claim your coins and start again working.")
+            help_embed.add_field(name="Claim coins after work",
+                                 value="By tiping `" + economybot_prefix + " work claim` you can end the current election")
+
+            help_embed.add_field(name="❗Banker Role❗", value="Banker has access to extra commands")
+            help_embed.add_field(name="Add money",
+                                 value="If you use `" + economybot_prefix + " add @mention`. You can add money \n")
+            help_embed.add_field(name=":exclamation: Attention :exclamation:",
+                                 value="If you voted once you cant delete your vote")
+            # sends the embed
+            await self.channel.send(embed=help_embed)
 
         # if the info command got called
         elif message.content == (economybot_prefix + ' info'):
