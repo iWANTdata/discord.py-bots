@@ -185,7 +185,6 @@ class EconomyBot(discord.Client):
         with open('users.json', 'w') as f:
             f.write(json.dumps(data, indent=2))
 
-
     async def remove_money(self, user, amount):
         # opne the json file
         with open('users.json') as f:
