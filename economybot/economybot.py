@@ -600,7 +600,7 @@ class EconomyBot(discord.Client):
                     register_error_embed = discord.Embed(title="You can't register because youre already in 👍",
                                           colour=discord.Colour(0x29485e))
                     register_error_embed.set_author(name="Economybot Register Error",
-                                     icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+                                     icon_url=self.profile_picture)
                     await self.channel.send(embed=register_error_embed)
                 # if not registered
                 else:
