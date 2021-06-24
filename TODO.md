@@ -26,7 +26,7 @@
 - [ ] Whole work system
   - [x] work command
   - [x] add money after a time
-  - [ ] only get the money if it got claimed
+  - [x] only get the money if it got claimed
 - [x] change Embed url
 - [x] if member in json file
 

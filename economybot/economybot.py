@@ -752,7 +752,7 @@ class EconomyBot(discord.Client):
 
 
             else:
-                self.not_registered_error_you(user.id)
+                await self.not_registered_error_you(user.id)
 
         elif message.content == economybot_prefix + ' work claim':
             user = message.author
