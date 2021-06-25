@@ -682,7 +682,7 @@ class EconomyBot(discord.Client):
                     if item == 'coconut':
                         await channel.send('And now you have to open it')
                         await asyncio.sleep(2)
-                        await channel.send('Just a Joke. You can it is still open :coconut:')
+                        await channel.send('Just a Joke. You can eat it, it is still open :coconut:')
 
                     if item == 'banana':
                         await channel.send('enojy your meal <@' + str(user.id) + ">")
