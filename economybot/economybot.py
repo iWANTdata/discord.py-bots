@@ -1,12 +1,12 @@
-''' 
-# -----------------------------------------------------------------------------------------------------------------------------------
+"""
+# ----------------------------------------------------------------------------------------------------------------------
 Author: Fynn Westerath
-Last Change: 07.06.2021
+Last Change: 14.06.2021
 (c) Copyright. Not for commercial use. All rights reserved
 GitHub
 https://github.com/Fynnyx/discord.py-bots
-# -----------------------------------------------------------------------------------------------------------------------------------
-'''
+# ----------------------------------------------------------------------------------------------------------------------
+"""
 
 
 # Imports
@@ -29,7 +29,7 @@ economybot_role_bank_permission: str = 'Banker'
 economybot_role_lvl1 = 855021146889650177
 economybot_role_lvl2 = 855081293742080013
 
-inv_items = {"coconut" : "0", "banana" : "0"}
+inv_items = {"coconut": "0", "banana": "0"}
 
 
 # creates the class for the Election bot
@@ -185,7 +185,6 @@ class EconomyBot(discord.Client):
         with open('users.json', 'w') as f:
             f.write(json.dumps(data, indent=2))
 
-
     async def remove_money(self, user, amount):
         # opne the json file
         with open('users.json') as f:
@@ -322,7 +321,24 @@ class EconomyBot(discord.Client):
 
         # if the help command got called
         if message.content == (economybot_prefix + ' help'):
-            print('Help')
+            # create the embed for help
+            help_embed = discord.Embed(colour=discord.Colour(0x29485e))
+
+            help_embed.set_author(name="Electionbot Help",
+                                  icon_url="https://cdn.discordapp.com/app-icons/840235732533510154/8424444588ad2b5a1a79252a4556c532.png?size=64")
+
+            help_embed.add_field(name="Start working",
+                                 value="With `" + economybot_prefix + " work` you can start to work. If you are done with working you claim your coins and start again working.")
+            help_embed.add_field(name="Claim coins after work",
+                                 value="By tiping `" + economybot_prefix + " work claim` you can end the current election")
+
+            help_embed.add_field(name="❗Banker Role❗", value="Banker has access to extra commands")
+            help_embed.add_field(name="Add money",
+                                 value="If you use `" + economybot_prefix + " add @mention`. You can add money \n")
+            help_embed.add_field(name=":exclamation: Attention :exclamation:",
+                                 value="If you voted once you cant delete your vote")
+            # sends the embed
+            await self.channel.send(embed=help_embed)
 
         # if the info command got called
         elif message.content == (economybot_prefix + ' info'):
@@ -584,7 +600,7 @@ class EconomyBot(discord.Client):
                     register_error_embed = discord.Embed(title="You can't register because youre already in 👍",
                                           colour=discord.Colour(0x29485e))
                     register_error_embed.set_author(name="Economybot Register Error",
-                                     icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+                                     icon_url=self.profile_picture)
                     await self.channel.send(embed=register_error_embed)
                 # if not registered
                 else:
@@ -696,9 +712,9 @@ class EconomyBot(discord.Client):
                         f.write(json.dumps(data, indent=2))
 
                 else:
-                    self.cant_find_item()
+                    await self.cant_find_item()
             else:
-                self.something_went_wrong_use()
+                await self.something_went_wrong_use()
 
         elif message.content == economybot_prefix + ' work':
             user = message.author
@@ -752,7 +768,7 @@ class EconomyBot(discord.Client):
 
 
             else:
-                self.not_registered_error_you(user.id)
+                await self.not_registered_error_you(user.id)
 
         elif message.content == economybot_prefix + ' work claim':
             user = message.author
