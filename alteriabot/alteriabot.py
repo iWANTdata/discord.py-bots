@@ -21,6 +21,7 @@ TOKEN = f.read()
 # variables to change
 # alteria_staff_channel: int = 850646620655058944
 alteria_bewerber_channel = 859847836182380584
+alteria_bewerber_staff_channel = 860126598254952458
 alteria_test_channel = 860451431591968768
 alteria_prefix: str = '?'
 
@@ -139,7 +140,7 @@ class Alteriabot(discord.Client):
                     bewerbung_embed.add_field(name='Bewerbertext' ,value=bew_text)
                     bewerbung_embed.set_thumbnail(url=bewerber_profile_picture)
 
-                    bewerbungs_channel = discord.utils.get(client.get_all_channels(), id=alteria_bewerber_channel)
+                    bewerbungs_channel = discord.utils.get(client.get_all_channels(), id=alteria_bewerber_staff_channel)
 
                     await bewerbungs_channel.send(embed=bewerbung_embed)
 
