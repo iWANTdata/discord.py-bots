@@ -20,7 +20,7 @@ TOKEN = f.read()
 
 # variables to change
 # alteria_staff_channel: int = 850646620655058944
-alteria_bewerber_channel = 860126598254952458
+alteria_bewerber_channel = 859847836182380584
 alteria_test_channel = 860451431591968768
 alteria_prefix: str = '?'
 alteria_staff : list= []
@@ -29,7 +29,7 @@ alteria_staff_role : str = 'Alteria Staff'
 class Alteriabot(discord.Client):
 
     async def send_bewerbung(self, status):
-        bewerbungs_channel = discord.utils.get(client.get_all_channels(), id=alteria_test_channel)
+        bewerbungs_channel = discord.utils.get(client.get_all_channels(), id=alteria_bewerber_channel)
 
         if status == 'closed':
             status_message = '❌ Geschlossen'
