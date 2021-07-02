@@ -44,12 +44,12 @@ class Alteriabot(discord.Client):
             except:
                 print('Something went wrong')
 
-
         bew_info_embed = discord.Embed(title="Bewerbungen: " + status_message,
                                        colour=discord.Colour(self.embed_color),
                                        description="Bewerbungen werden kurz vor der Eröffnung bearbeitet (in ca. 2 Wochen)\n"
                                        "\n"
-                                       "Schicke deine Bewerbung an <@860027415072997408> mit `?bewerbung <bewerbungstext>`. (z.B  ?bewerbung Hallo, ich heiße * und bin * Jahre alt, ich spiele seid ...)\n"
+                                       "Schicke deine Bewerbung an <@860027415072997408> mit `?bewerbung <bewerbungstext>`.\n"
+                                       "(z.B  ?bewerbung Hallo, ich heiße * und bin * Jahre alt, ich spiele seid ...)\n"
                                        "\n"
                                        "\n"
                                        "Bewerbungskriterien:\n"
@@ -65,8 +65,8 @@ class Alteriabot(discord.Client):
                                        "- Erzähle kurz was über dich\n"
                                        "\n"
                                        "\n"
-                                       "Es funktioniert etwas nicht? Melde dich in <#860457211473428500>"
-                                       "---"
+                                       "Es funktioniert etwas nicht? Melde dich in <#860457211473428500>\n"
+                                       "--- "
                                        )
 
         bew_info_embed.add_field(name="❗Wichtig❗", value="Achtet darauf das `?bewerbung` **klein** geschrieben ist!")
@@ -80,6 +80,7 @@ class Alteriabot(discord.Client):
         print('Alteria: logged in')
 
     async def on_message(self, message):
+        user = message.author
         channel = message.channel
         if message.author != client.user:
             if message.content == alteria_prefix + ' info':
@@ -116,10 +117,14 @@ class Alteriabot(discord.Client):
                 await channel.send('regel embed')
 
             if message.content == alteria_prefix + 'close_bewerbung':
-                await self.send_bewerbung('closed')
+                for role in user.roles:
+                    if str(role) == 'Owner':
+                        await self.send_bewerbung('closed')
 
             if message.content == alteria_prefix + 'open_bewerbung':
-                await self.send_bewerbung('opened')
+                for role in user.roles:
+                    if str(role) == 'Owner':
+                        await self.send_bewerbung('opened')
 
             # if message.content.startswith(alteria_prefix + 'bewerbung '):
             #     bew_message = str(message.content)
