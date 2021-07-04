@@ -152,7 +152,7 @@ class Alteriabot(discord.Client):
                         '❌ Beim versuch deine Bewerbung zu senden ist was schiefgelaufen probiere ...\n'
                         ' `?bewerbung <bewerbertext [Alter] [Warum möchtest du mitmachen] [Gutes Mikrfon?] [Deine Erfahrung mit solchen Projekten] und [Etwas über dich]>`')
 
-            if message.content == alteria_prefix + '?ifn':
+            if message.content == alteria_prefix + 'ifn':
                 for role in user.roles:
                     if str(role) == 'Owner':
 
