@@ -156,7 +156,7 @@ class Alteriabot(discord.Client):
                 for role in user.roles:
                     if str(role) == 'Owner':
 
-                        message.delete()
+                        await message.delete()
         
                         infos_für_neue_embed = discord.Embed(title='Informationen für Neue', colour=discord.Colour(self.embed_color))
                         infos_für_neue_embed.add_field(name='Was ist Alteria für ein Server?', 
