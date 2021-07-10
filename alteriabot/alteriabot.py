@@ -123,7 +123,7 @@ class Alteriabot(discord.Client):
 
             if message.content == alteria_prefix + 'open_bewerbung':
                 for role in user.roles:
-                    if str(role) == 'Owner':
+                    if str(role) == 'Serverleitung':
                         await self.send_bewerbung('opened')
 
             if message.content.startswith(alteria_prefix + 'bewerbung '):
@@ -154,7 +154,7 @@ class Alteriabot(discord.Client):
 
             if message.content == alteria_prefix + 'ifn':
                 for role in user.roles:
-                    if str(role) == 'Owner':
+                    if str(role) == 'Serverleitung':
 
                         await message.delete()
         
