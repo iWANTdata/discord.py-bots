@@ -1,5 +1,6 @@
 import discord
 from discord import Member
+from discord import message
 from discord.ext import commands
 import discord.utils
 import asyncio
@@ -13,7 +14,17 @@ PREFIX = data["properties"]["prefix"]
 
 discord_link = data["properties"]["discord_link"]
 
-client = commands.Bot(command_prefix=PREFIX, help_command=None, intents=discord.Intents.all())
+intents = discord.Intents()
+intents.guilds = True
+intents.members = True
+intents.emojis = True
+intents.messages = True
+intents.reactions = True
+intents.dm_messages = True
+
+
+
+client = commands.Bot(command_prefix=PREFIX, help_command=None, intents=intents)
 
 # Functions ---------------------------------------------------------------------------
 
@@ -47,12 +58,22 @@ async def send_error(error, channel):
     await msg.delete()
 
 
-# On Ready ---------------------------------------------------------------------------
+# Events ---------------------------------------------------------------------------
 
 @client.event
 async def on_ready():
     print("FabsiBot: logged in")
     client.loop.create_task(status_task())
+
+@client.event
+async def on_member_join(member):
+    channel_id = int(data["properties"]["events"]["on_member_join"]["welcome_channel"])
+    channel = await client.fetch_channel(channel_id)
+    rule_channel = await client.fetch_channel(data["properties"]["events"]["on_member_join"]["rules_channel"])
+    info_channel = await client.fetch_channel(data["properties"]["events"]["on_member_join"]["info_channel"])
+    await channel.send("Hey <@" + str(member.id) + "> schön dass du auf Fabsi's Server gejoint bis, lies dir bitte die Regeln in <#" + str(rule_channel.id) + "> durch und schau in <#" + str(info_channel.id) + "> für mehr Informationen")
+
+
 
 # Moderator ---------------------------------------------------------------------------
 
@@ -72,13 +93,8 @@ async def clear(ctx, amount:str):
                 await send_error("Amount must be a number!", channel)
             except:
                 await send_error("Please try this format -> `-clear [amount(number)]`", channel)
-    elif isinstance(amount, commands.MissingRequiredArgument):
-        amount = 2
-        await channel.purge(limit=amount)
-        await send_deleted_msgs(amount, channel) 
     else:
-        await send_error("Please try this format -> `-clear [amount(number)]`", channel)
-        return
+        await ctx.message.delete()
 
 
 async def send_deleted_msgs(amount, channel):
@@ -104,5 +120,22 @@ async def send_help_embed(ctx):
                                 inline=False)
 
     await ctx.channel.send(embed=help_embed)
+
+# Commands ---------------------------------------------------------------------------
+
+@client.command()
+async def stage(ctx, *, name):
+    if await check_permissions("stage", ctx.message.author, ctx.channel):
+        category_id = int(data["properties"]["commands"]["stage"]["category_id"])
+        category = discord.utils.get(ctx.guild.categories, id=category_id)
+        name = "🔴 " + name
+        await ctx.guild.create_stage_channel(name, category=category, position=1)
+        await ctx.channel.send("Created Stage channel: " + name)
+    else:
+        await ctx.message.delete()
+
+@client.command()
+async def social_media(ctx):
+    await ctx.channel.send("comming soon")
 
 client.run(TOKEN)

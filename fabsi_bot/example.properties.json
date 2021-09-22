@@ -1,0 +1,31 @@
+{"properties": {
+    "token": "",
+    "prefix": "#",
+    "discord_link": "https://discord.gg/9VCKxCZgKW",
+    "status": {
+        "time": 7,
+        "messages": [
+            "Twitch: twitch.tv/fabsi_mc"
+        ]
+    },
+    "commands": {
+        "help": {
+            "description": "Show all available commands with description.",
+            "aliases": [
+                "h"
+            ],
+            "permissions": [
+                "Everyone"
+            ]            
+        },
+        "clear": {
+            "description": "Clear an specific amount of messages",
+            "aliases": [
+                
+            ],
+            "permissions": [
+                "Server Owner", "Moderator"
+            ]            
+        }
+    }
+}}
