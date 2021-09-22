@@ -1,3 +1,4 @@
+from os import scandir
 import discord
 from discord import Member
 from discord import message
@@ -5,6 +6,8 @@ from discord.ext import commands
 import discord.utils
 import asyncio
 import json
+from discord.webhook import AsyncWebhookAdapter
+import requests
 
 with open("properties.json") as f:
     data = json.load(f)
@@ -37,6 +40,31 @@ async def status_task():
             await asyncio.sleep(time)
 
 
+async def check_isLive():
+    client_id = data["properties"]["events"]["twitch"]["client_id"]
+    client_secret = data["properties"]["events"]["twitch"]["client_secret"]
+    streamer_name = data["properties"]["events"]["twitch"]["streamer"]
+
+    body = {
+        'client_id': client_id,
+        'client_secret': client_secret,
+        "grant_type": 'client_credentials'
+    }
+    r = requests.post('https://id.twitch.tv/oauth2/token', body)
+    keys = r.json();
+    headers = {
+        'Client-ID': client_id,
+        'Authorization': 'Bearer ' + keys['access_token']
+    }
+    stream = requests.get('https://api.twitch.tv/helix/streams?user_login=' + streamer_name, headers=headers)
+    stream_data = stream.json()
+    print(stream_data)
+    if len(stream_data['data']) == 1:
+        return True
+    else:
+        return False
+
+
 async def check_permissions(command, user:Member, channel):
     command_perm_list = data["properties"]["commands"][str(command)]["permissions"]
     user_allowed = False
@@ -64,6 +92,7 @@ async def send_error(error, channel):
 async def on_ready():
     print("FabsiBot: logged in")
     client.loop.create_task(status_task())
+    # client.loop.create_task(check_isLive())
 
 @client.event
 async def on_member_join(member):
@@ -129,7 +158,8 @@ async def stage(ctx, *, name):
         category_id = int(data["properties"]["commands"]["stage"]["category_id"])
         category = discord.utils.get(ctx.guild.categories, id=category_id)
         name = "🔴 " + name
-        await ctx.guild.create_stage_channel(name, category=category, position=1)
+        s_channel = await ctx.guild.create_stage_channel(name, category=category, position=1)
+        # await s_channel.set_permissions(s_channel, overwrite=None)
         await ctx.channel.send("Created Stage channel: " + name)
     else:
         await ctx.message.delete()
@@ -137,5 +167,11 @@ async def stage(ctx, *, name):
 @client.command()
 async def social_media(ctx):
     await ctx.channel.send("comming soon")
+
+@client.command()
+async def twitch(ctx):
+    isLive = await check_isLive()
+    await ctx.channel.send(isLive)
+    
 
 client.run(TOKEN)
