@@ -15,8 +15,6 @@ with open("properties.json") as f:
 TOKEN = data["properties"]["token"]
 PREFIX = data["properties"]["prefix"]
 
-discord_link = data["properties"]["discord_link"]
-
 intents = discord.Intents()
 intents.guilds = True
 intents.members = True
@@ -41,6 +39,10 @@ async def status_task():
 
 
 async def check_isLive():
+
+    with open("properties.json") as f:
+        data = json.load(f)
+
     client_id = data["properties"]["events"]["twitch"]["client_id"]
     client_secret = data["properties"]["events"]["twitch"]["client_secret"]
     streamer_name = data["properties"]["events"]["twitch"]["streamer"]
@@ -58,11 +60,72 @@ async def check_isLive():
     }
     stream = requests.get('https://api.twitch.tv/helix/streams?user_login=' + streamer_name, headers=headers)
     stream_data = stream.json()
-    print(stream_data)
+    
     if len(stream_data['data']) == 1:
-        return True
+        return dict(stream_data)
     else:
         return False
+
+async def twitch():
+    while True:
+        isLive = await check_isLive()
+        if not isLive:
+            return
+        else:
+            with open("stream.json", "w") as f:
+                f.write(json.dumps(dict(isLive), indent=2))
+            with open("properties.json") as f:
+                data = json.load(f)
+            with open("stream.json") as f:
+                stream_data = json.load(f)
+
+            stream_id = stream_data["data"][0]["id"]
+            last_stream_id = data["properties"]["events"]["twitch"]["last_stream_id"]
+
+            if stream_id != last_stream_id:
+
+                data["properties"]["events"]["twitch"]["last_stream_id"] = str(stream_id)
+                with open("properties.json", "w") as f:
+                    f.write(json.dumps(data, indent=2))
+
+                name = stream_data["data"][0]["user_name"]
+                user_login = stream_data["data"][0]["user_login"]
+                game = stream_data["data"][0]["game_name"]
+                title = stream_data["data"][0]["title"]
+                thumbnail = stream_data["data"][0]["thumbnail_url"]
+                thumbnail = thumbnail.replace('{width}', '320')
+                thumbnail = thumbnail.replace('{height}', '180')
+                role_id = str(data["properties"]["events"]["twitch"]["twitch_role"])
+
+                twitch_embed = discord.Embed(title="🔴 - %s streamt %s - " % (name, game),
+                                                url="https://twitch.tv/%s" % (user_login),
+                                                description='Schaue [hier](https://twitch.tv/%s) vorbei oder klicke oben.\nIch freue mich dich zu sehen' % (user_login), 
+                                                color=discord.Color.dark_purple())
+                twitch_embed.add_field(name=title, value="-------------------------------------")
+                twitch_embed.set_image(url=thumbnail)
+
+                channel = client.get_channel(int(data["properties"]["events"]["twitch"]["twitch_channel"]))
+                await channel.send("<@&" + role_id + ">")
+                twitch_message = await channel.send(embed=twitch_embed)
+            
+            else: 
+                name = stream_data["data"][0]["user_name"]
+                user_login = stream_data["data"][0]["user_login"]
+                game = stream_data["data"][0]["game_name"]
+                title = stream_data["data"][0]["title"]
+                thumbnail = stream_data["data"][0]["thumbnail_url"]
+                thumbnail = thumbnail.replace('{width}', '320')
+                thumbnail = thumbnail.replace('{height}', '180')
+
+                new_twitch_embed = discord.Embed(title="🔴 - %s streamt %s - " % (name, game),
+                                                url="https://twitch.tv/%s" % (user_login),
+                                                description='Schaue [hier](https://twitch.tv/%s) vorbei oder klicke oben.\nIch freue mich dich zu sehen' % (user_login), 
+                                                color=discord.Color.dark_purple())
+                new_twitch_embed.add_field(name=title, value="-------------------------------------")
+                new_twitch_embed.set_image(url=thumbnail)
+                await twitch_message.edit(embed=new_twitch_embed)
+        await asyncio.sleep(10)
+    
 
 
 async def check_permissions(command, user:Member, channel):
@@ -92,7 +155,7 @@ async def send_error(error, channel):
 async def on_ready():
     print("FabsiBot: logged in")
     client.loop.create_task(status_task())
-    # client.loop.create_task(check_isLive())
+    client.loop.create_task(twitch())
 
 @client.event
 async def on_member_join(member):
@@ -131,6 +194,14 @@ async def send_deleted_msgs(amount, channel):
     await asyncio.sleep(2)
     await msg.delete()
 
+
+@client.listen('on_message')
+async def blacklist(message):
+    blacklist = data["properties"]["events"]["blacklist"]["blacklist"]
+    for x in blacklist:
+        if x in message.content:
+            await message.channel.send("<@&889822969596088320> Die Nachricht verwendet geblockte Wörter") 
+
 # Help Command ---------------------------------------------------------------------------
 
 @client.command(pass_context=True, aliases=list(data["properties"]["commands"]["help"]["aliases"]))
@@ -168,10 +239,5 @@ async def stage(ctx, *, name):
 async def social_media(ctx):
     await ctx.channel.send("comming soon")
 
-@client.command()
-async def twitch(ctx):
-    isLive = await check_isLive()
-    await ctx.channel.send(isLive)
-    
 
 client.run(TOKEN)

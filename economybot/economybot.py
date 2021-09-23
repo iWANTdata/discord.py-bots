@@ -271,7 +271,7 @@ class EconomyBot(discord.Client):
             f.write(json.dumps(data, indent=2))
 
     async def done_work(self, user_id, where):
-        with open('users.json', 'r') as f:
+        with open('users.json') as f:
                 data = json.load(f)
 
         with open('users.json', 'w') as f:

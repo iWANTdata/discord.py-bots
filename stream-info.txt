@@ -13,5 +13,6 @@
     'thumbnail_url': 
     'https://static-cdn.jtvnw.net/previews-ttv/live_user_fabsi_mc-{width}x{height}.jpg', 
     'tag_ids': ['9166ad14-41f1-4b04-a3b8-c8eb838c6be6'], 
-    'is_mature': False}], 
+    'is_mature': False
+    }], 
     'pagination': {}}
